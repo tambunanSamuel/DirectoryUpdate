@@ -1,17 +1,55 @@
 using System;
 
+
+/// This class is used as a Data Object for the Data Directory application
 namespace com.qas.sambo.directoryupdate.data
 {
 	public class DataElement {
-		private string SourcePath;
-		private DateTime LastModified;
-		private string DestinationPath;
+		private string sourcePath;
+		private DateTime lastModified;
+		private string destinationPath;
 		
 		
 		public DataElement() {
-			SourcePath="";
-			//LastModified=null;
-			DestinationPath = "";
+			sourcePath = "";
+			destinationPath = "";
+			lastModified = default(DateTime);
+		}
+		
+		public string SourcePath
+		{
+			get
+			{
+				return sourcePath;
+			}
+			set
+			{
+				sourcePath = value;
+			}
+		}
+		
+		public DateTime LastModified
+		{
+			get
+			{
+				return lastModified;
+			}
+			set
+			{
+				lastModified = value;
+			}
+		}
+		
+		public string DestinationPath
+		{
+			get
+			{
+				return destinationPath;
+			}
+			set
+			{
+				destinationPath = value;
+			}
 		}
 	}
 }
