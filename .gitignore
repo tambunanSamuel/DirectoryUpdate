@@ -1,0 +1,6 @@
+#ignore .dlls
+*.dll
+#ignore .exe
+*.exe
+# Ignore bin files
+bin/
