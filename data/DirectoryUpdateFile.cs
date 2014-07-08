@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using com.qas.sambo.directoryupdate;
 
 namespace com.qas.sambo.directoryupdate.data
 {
 	public class DirectoryUpdateFile 
 	{
+		DirectoryUpdateFile df = new DirectoryUpdateFile();
 		public static void Main(String []args) 
 		{
+			df.SourcePath=@"\\Product\product\World Data\NZL\v4";
 			Console.WriteLine("Hello World");
 			try {
 				//string dirpath = @"N:\";
