@@ -16,6 +16,12 @@ namespace com.qas.sambo.directoryupdate.data
 			lastModified = default(DateTime);
 		}
 		
+		public DataElement(string sourcePath, string destinationpath) {
+			SourcePath = sourcePath;
+			DestinationPath = destinationPath;
+			lastModified = default(DateTime);
+		}
+		
 		public string SourcePath
 		{
 			get

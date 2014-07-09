@@ -1,11 +1,20 @@
 using System;
 using com.qas.sambo.directoryupdate.data;
+using System.Collections.Generic;
 
 namespace com.qas.sambo.directoryupdate.data
 {
-	public class StaticDirectoryListings
+	public static class StaticDirectoryListings
 	{
-		public static DataElement NZLde;
+		private static DataElement NZLde;
+		private static DataElement AUSde;
+		private static DataElement AUGde;
+		private static DataElement NZGde;
+		private static DataElement AUEde;
+		private static DataElement SGFde;
+		
+		public static Dictionary<string,DataElement> DeList;
+		
 		/* public StaticDirectoryListings() 
 		{
 			NZLde = new DataElement();
@@ -16,6 +25,11 @@ namespace com.qas.sambo.directoryupdate.data
 			NZLde = new DataElement();
 			NZLde.SourcePath = @"\\Product\product\World Data\NZL\v4";
 			NZLde.DestinationPath = @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder";
+			
+			
+			
+			DeList = new Dictionary<string, DataElement>();
+			DeList.add("NZL",NZLde);
 		}
 		
 	}
