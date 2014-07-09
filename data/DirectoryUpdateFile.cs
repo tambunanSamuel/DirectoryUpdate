@@ -4,13 +4,15 @@ using System.IO;
 using System.Linq;
 using com.qas.sambo.directoryupdate;
 using Microsoft.VisualBasic.FileIO;
+using System.Reflection;
 
 namespace com.qas.sambo.directoryupdate.data
 {
 	public class DirectoryUpdateFile 
 	{
-		
-		public static void Main(String []args) 
+        private string logFileDirectory;
+
+		public static void Main(String[] Args) 
 		{
 		
 		
@@ -23,14 +25,22 @@ namespace com.qas.sambo.directoryupdate.data
 		
 			Console.WriteLine("Copying dir from {0} to {1}", dirFrom, dirTo);
 			df.CopyDirectories(dirFrom,dirTo);
+            Console.WriteLine(dirTo);
+            dirTo = " ";
+            //dirTo = (dirTo.Length-1!='\\') ? 
+            Console.WriteLine("is the last string \\? {0}", dirTo.ElementAt(dirTo.Length - 1) == '\\');
+            dirTo = (dirTo.ElementAt(dirTo.Length - 1)) == '\\' ? dirTo : dirTo + "\\"; 
+            Console.WriteLine("Last element of dirTo is {0}",dirTo.ElementAt(dirTo.Length-1));
+            dirTo = dirTo + "\\";
+            Console.WriteLine("is the last string \\? {0}", dirTo.ElementAt(dirTo.Length-1) == '\\');
 			
 			try {
-				//string dirpath = @"N:\";
 				string dirpath = @"\\Product\product\World Data";
 				dirpath = @"\\Product\product\World Data\NZL\v4";
 				List<string> dirs = new List<string>(Directory.EnumerateDirectories(dirpath));
 				Console.WriteLine("ff" == "fg");
-				DateTime dtTest = new DateTime(2014,2,05);
+                DateTime dtTest = new DateTime(2014,2,05);
+         
 				/*foreach (var dir in dirs)
 				{
 				
@@ -51,8 +61,32 @@ namespace com.qas.sambo.directoryupdate.data
 			{
 				Console.WriteLine(e.Message);
 			}
+            df.WriteLogFile();
 			
 		}
+
+        /// <summary>
+        /// Directory where the LogFile shoudl be located
+        /// It will create a history.log
+        /// </summary>
+        public String LogFileDirectory
+        {
+            get
+            {
+                return logFileDirectory;
+            }
+            set
+            {
+                if (value != "")
+                {
+                    value = (value.ElementAt(value.Length - 1)) == '\\' ? value : value + "\\"; 
+                }
+                else
+                {
+                    logFileDirectory = value;
+                }
+            }
+        }
 		
 		private static bool CheckMainDirectory(String dir)
 		{
@@ -76,6 +110,11 @@ namespace com.qas.sambo.directoryupdate.data
 			{
 				Console.WriteLine("Cannot write file. Please check source and destination path:\n\n {0}",e.ToString());
 			}
+            catch(System.IO.DirectoryNotFoundException e)
+            {
+                Console.WriteLine("The source/destination directory has not been found", e.ToString());
+            }
+
 		}
 		
 		
@@ -97,5 +136,26 @@ namespace com.qas.sambo.directoryupdate.data
 			else 
 				return false;
 		}
+
+        /// <summary>
+        /// This will write to the log file with a file called Log.txt
+        /// in the directory of LogFileDirectory
+        /// </summary>
+        private void WriteLogFile()
+        {
+            if (LogFileDirectory== null)
+            {
+
+                Console.WriteLine("Please set the Log File Directory");
+                Console.WriteLine("Executing Assembly is {0}", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+                Console.WriteLine("Get Entry Assembly is {0}", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+
+            } else
+            {
+
+            }
+        }
+
+
 	}
 }

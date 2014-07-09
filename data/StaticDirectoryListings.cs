@@ -29,7 +29,7 @@ namespace com.qas.sambo.directoryupdate.data
 			
 			
 			DeList = new Dictionary<string, DataElement>();
-			DeList.add("NZL",NZLde);
+			DeList.Add("NZL",NZLde);
 		}
 		
 	}

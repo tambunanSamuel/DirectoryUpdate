@@ -4,3 +4,10 @@
 *.exe
 # Ignore bin files
 bin/
+#Ignore obj folders
+obj/
+#Ignore csproje
+*.csproj
+*.csproj*
+*.sln
+*.v12*
