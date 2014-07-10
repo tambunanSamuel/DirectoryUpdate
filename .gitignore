@@ -10,5 +10,9 @@ obj/
 *.csproj
 *.csproj*
 *.sln
+<<<<<<< HEAD
 *.v12*
 *.config
+=======
+*.v12*
+>>>>>>> remotes/origin/master
