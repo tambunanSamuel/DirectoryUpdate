@@ -6,10 +6,6 @@
 bin/
 #Ignore obj folders
 obj/
-#Ignore csproje
-*.csproj
-*.csproj*
-*.sln
 <<<<<<< HEAD
 *.v12*
 *.config
