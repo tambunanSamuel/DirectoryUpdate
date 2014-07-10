@@ -1,0 +1,14 @@
+#ignore .dlls
+*.dll
+#ignore .exe
+*.exe
+# Ignore bin files
+bin/
+#Ignore obj folders
+obj/
+#Ignore csproje
+*.csproj
+*.csproj*
+*.sln
+*.v12*
+*.config
