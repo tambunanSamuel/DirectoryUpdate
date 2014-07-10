@@ -12,7 +12,7 @@ namespace com.qas.sambo.directoryupdate.data
 	{
         private string logFileDirectory;
 
-		public static void Main(String[] Args) 
+		public static void Main() 
 		{
 		
 		
@@ -24,7 +24,7 @@ namespace com.qas.sambo.directoryupdate.data
 		
 		
 			Console.WriteLine("Copying dir from {0} to {1}", dirFrom, dirTo);
-			df.CopyDirectories(dirFrom,dirTo);
+			//df.CopyDirectories(dirFrom,dirTo);
             Console.WriteLine(dirTo);
             dirTo = " ";
             //dirTo = (dirTo.Length-1!='\\') ? 
