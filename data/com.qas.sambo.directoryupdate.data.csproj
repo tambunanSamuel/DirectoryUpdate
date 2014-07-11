@@ -49,7 +49,7 @@
     <RootNamespace>com.qas.sambo.directoryupdate.data</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>com.qas.sambo.directoryupdate.data.Simple</StartupObject>
+    <StartupObject>com.qas.sambo.directoryupdate.data.ThreadTest</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -66,6 +66,7 @@
     <Compile Include="DirectoryUpdateFile.cs" />
     <Compile Include="StaticDirectoryListings.cs" />
     <Compile Include="StopJoin.cs" />
+    <Compile Include="ThreadTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">

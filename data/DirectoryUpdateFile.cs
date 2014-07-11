@@ -5,6 +5,7 @@ using System.Linq;
 using com.qas.sambo.directoryupdate;
 using Microsoft.VisualBasic.FileIO;
 using System.Reflection;
+using System.Threading;
 
 namespace com.qas.sambo.directoryupdate.data
 {
@@ -98,13 +99,27 @@ namespace com.qas.sambo.directoryupdate.data
 		{
 			
 		}
-		
-		
+
+
+        private void MoveDirectory(string SourceDir, string NewPath)
+        {
+            new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir, NewPath, true);
+        }
+
+        
+
+
 		private void CopyDirectories(string SourceDir, string NewPath)
 		{
 			// Using Visual Basic 
 			try {
-				new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir,NewPath,true);
+                Thread CopyThread = new Thread(new ThreadStart(delegate() { MoveDirectory(SourceDir, NewPath); }));
+                //Thread CopyThread = new Thread(new ThreadStart())
+                //ThreadStart childref = new ThreadStart(MoveDirectory(SourceDir,NewPath));
+                //new Thread(MoveDirectory).Start();
+                //Thread CopyThread = new Thread(new ThreadStartnew Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir, NewPath, true)));
+				//new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir,NewPath,true);
+
 			}
 			catch(System.InvalidOperationException e)
 			{
@@ -145,7 +160,6 @@ namespace com.qas.sambo.directoryupdate.data
         {
             if (LogFileDirectory== null)
             {
-
                 Console.WriteLine("Please set the Log File Directory");
                 Console.WriteLine("Executing Assembly is {0}", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
                 Console.WriteLine("Get Entry Assembly is {0}", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
