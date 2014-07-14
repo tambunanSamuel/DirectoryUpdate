@@ -7,6 +7,16 @@ bin/
 #Ignore obj folders
 obj/
 <<<<<<< HEAD
+=======
+#Ignore csproje
+*.csproj
+*.csproj*
+*.sln
+
+#Ignore Zipped
+Zipped/
+>>>>>>> Master
+<<<<<<< HEAD
 *.v12*
 *.config
 =======

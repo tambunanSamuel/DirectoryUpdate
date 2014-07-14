@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace com.qas.sambo.directoryupdate.data
+namespace com.qas.sambo.directoryupdate.SampleTest
 {
     // StopJoin.cs
 
