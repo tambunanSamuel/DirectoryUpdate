@@ -6,6 +6,8 @@
 bin/
 #Ignore obj folders
 obj/
+#Ignore Zipped
+Zipped/
 <<<<<<< HEAD
 =======
 #Ignore csproje
