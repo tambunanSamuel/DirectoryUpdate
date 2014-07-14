@@ -10,6 +10,9 @@ obj/
 *.csproj
 *.csproj*
 *.sln
+
+#Ignore Zipped
+Zipped/
 <<<<<<< HEAD
 *.v12*
 *.config
