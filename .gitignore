@@ -10,10 +10,6 @@ obj/
 Zipped/
 <<<<<<< HEAD
 =======
-#Ignore csproje
-*.csproj
-*.csproj*
-*.sln
 
 #Ignore Zipped
 Zipped/
