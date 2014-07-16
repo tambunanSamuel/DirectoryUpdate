@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>com.qas.sambo.directoryupdate.SampleTest.ZipTestFile</StartupObject>
+    <StartupObject>com.qas.sambo.directoryupdate.SampleTest.AppSettingExamples</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -41,6 +41,7 @@
     <Compile Include="Data\DataElement.cs" />
     <Compile Include="Data\DirectoryUpdateFile.cs" />
     <Compile Include="Data\StaticDirectoryListings.cs" />
+    <Compile Include="SampleTest\AppSettingExamples.cs" />
     <Compile Include="SampleTest\ASPCreation.cs" />
     <Compile Include="SampleTest\StopJoin.cs" />
     <Compile Include="SampleTest\ZipTestFile.cs" />
@@ -51,6 +52,7 @@
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
