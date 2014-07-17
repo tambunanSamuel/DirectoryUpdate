@@ -1,2 +1,3 @@
 ﻿Add Threads to ZipEncryption
 Check ZIP
+checked if the threadpool will stop afterwards
