@@ -78,7 +78,9 @@ namespace com.qas.sambo.directoryupdate.SampleTest
             {
                 zip.Encryption = EncryptionAlgorithm.WinZipAes256;
                 zip.Password = new ZipTestFile().password;
+                Console.WriteLine("Adding Directory of path");
                 zip.AddDirectory(path);
+                Console.WriteLine("Saving Files");
                 zip.Save(savedFile);
             }
         }

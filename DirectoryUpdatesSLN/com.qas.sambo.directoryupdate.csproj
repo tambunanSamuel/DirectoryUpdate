@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>com.qas.sambo.directoryupdate.data.DirectoryUpdateFile</StartupObject>
+    <StartupObject>com.qas.sambo.directoryupdate.SampleTest.FileCreation</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -45,13 +45,15 @@
     <Compile Include="Data\StaticDirectoryListings.cs" />
     <Compile Include="SampleTest\AppSettingExample.cs" />
     <Compile Include="SampleTest\ASPCreation.cs" />
+    <Compile Include="SampleTest\FileCreation.cs" />
     <Compile Include="SampleTest\StopJoin.cs" />
+    <Compile Include="SampleTest\ThreadsExample.cs" />
     <Compile Include="SampleTest\ZipTestFile.cs" />
     <Compile Include="Utils\ZipEncryption.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip">
-      <HintPath>Zipped\DotNetZipLib-DevKit-v1.9\zip-v1.9\Release\Ionic.Zip.dll</HintPath>
+      <HintPath>References\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />

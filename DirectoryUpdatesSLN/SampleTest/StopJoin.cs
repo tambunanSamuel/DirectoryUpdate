@@ -22,7 +22,7 @@ namespace com.qas.sambo.directoryupdate.SampleTest
         }
     };
 
-    public class Simple
+    public class StopJoin
     {
         public static void Main()
         {
