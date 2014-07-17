@@ -32,29 +32,34 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>com.qas.sambo.directoryupdate.SampleTest.AppSettingExamples</StartupObject>
+    <StartupObject>com.qas.sambo.directoryupdate.data.DirectoryUpdateFile</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DataElement.cs" />
     <Compile Include="Data\DirectoryUpdateFile.cs" />
     <Compile Include="Data\StaticDirectoryListings.cs" />
-    <Compile Include="SampleTest\AppSettingExamples.cs" />
+    <Compile Include="SampleTest\AppSettingExample.cs" />
     <Compile Include="SampleTest\ASPCreation.cs" />
     <Compile Include="SampleTest\StopJoin.cs" />
     <Compile Include="SampleTest\ZipTestFile.cs" />
+    <Compile Include="Utils\ZipEncryption.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip">
-      <HintPath>..\..\..\DirectoryUpdatesSLN\DirectoryUpdatesSLN\Zipped\DotNetZipLib-DevKit-v1.9\zip-v1.9\Release\Ionic.Zip.dll</HintPath>
+      <HintPath>Zipped\DotNetZipLib-DevKit-v1.9\zip-v1.9\Release\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="ThingsToDo.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

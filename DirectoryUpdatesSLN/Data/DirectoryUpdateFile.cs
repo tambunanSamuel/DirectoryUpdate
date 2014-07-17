@@ -41,21 +41,21 @@ namespace com.qas.sambo.directoryupdate.data
 				Console.WriteLine("ff" == "fg");
                 DateTime dtTest = new DateTime(2014,2,05);
          
-				/*foreach (var dir in dirs)
+				foreach (var dir in dirs)
 				{
 				
 				Console.WriteLine("{0} was created at {1} and is newer? {2}", dir, Directory.GetCreationTime(dir),df.CheckIfNewer(dir,dtTest));
 					
-				/*DateTime dt = Directory.GetCreationTime(dir);
+				DateTime dt = Directory.GetCreationTime(dir);
 					//CheckMainDirectory(dir);
 					Console.WriteLine("{0} was created at {1}", dir, Directory.GetCreationTime(dir));
-					//Console.WriteLine("{0}", dir.Substring(dir.LastIndexOf("\\")+1));
+					Console.WriteLine("{0}", dir.Substring(dir.LastIndexOf("\\")+1));
 					
 					// Only print if it is newer than a certain date
 					
 				}
 				Console.WriteLine("{0} directories found.", dirs.Count);
-				*/
+				
 			}
 			catch(Exception e)
 			{

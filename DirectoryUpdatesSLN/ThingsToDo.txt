@@ -1,0 +1,2 @@
+﻿Add Threads to ZipEncryption
+Check ZIP

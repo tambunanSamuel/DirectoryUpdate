@@ -8,7 +8,15 @@ bin/
 obj/
 #Ignore Zipped
 Zipped/
+<<<<<<< HEAD
+=======
+
 #Ignore Zipped
 Zipped/
-#adding References
-!DirectoryUpdatesSLN/References/Ionic.Zip.dll
+>>>>>>> Master
+<<<<<<< HEAD
+*.v12*
+*.config
+=======
+*.v12*
+>>>>>>> remotes/origin/master

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ionic.Zip;
+
 
 namespace com.qas.sambo.directoryupdate.SampleTest
 {
@@ -10,6 +12,7 @@ namespace com.qas.sambo.directoryupdate.SampleTest
     {
         private static Random random = new Random((int)DateTime.Now.Ticks);
         private static readonly String CharacterList = "abcdefghijklmnopqrstuvwxyz!@#$%&";
+        private string password;
         public static void Main()
         {
 
@@ -18,6 +21,11 @@ namespace com.qas.sambo.directoryupdate.SampleTest
             for (int i = 0; i < 10; i++ )
                 Console.WriteLine("Password is {0}", EncryptionPasswordGenerator(8));
 
+            Console.WriteLine("Insert Directory:\n");
+            string cc = Console.ReadLine();
+            Console.WriteLine("Ccc is {0}", cc);
+            Console.WriteLine("Current Directory is at {0}", System.IO.Directory.GetCurrentDirectory());
+            ZipDirectory(cc,"123456");
         }
 
         public static string EncryptionPasswordGenerator(int size)
@@ -62,7 +70,21 @@ namespace com.qas.sambo.directoryupdate.SampleTest
             }
                 return builder.ToString();
         }
+
+        public static void ZipDirectory(string path, string password)
+        {
+            String savedFile = @"test.zip";
+            using (ZipFile zip = new ZipFile())
+            {
+                zip.Encryption = EncryptionAlgorithm.WinZipAes256;
+                zip.Password = new ZipTestFile().password;
+                zip.AddDirectory(path);
+                zip.Save(savedFile);
+            }
+        }
     }
+
+   
 
 
 }
