@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>com.qas.sambo.directoryupdate.SampleTest.FileCreation</StartupObject>
+    <StartupObject>com.qas.sambo.directoryupdate.SampleTest.ThreadsExample</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config">
