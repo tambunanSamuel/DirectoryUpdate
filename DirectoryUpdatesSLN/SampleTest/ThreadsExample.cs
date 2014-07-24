@@ -33,17 +33,15 @@ namespace com.qas.sambo.directoryupdate.SampleTest
         /// <param name="stateInfo"></param>
         static void ThreadProc(Object stateInfo)
         {
-            
+
             int i = 0;
             while (ThreadsExample.myBoolean)
             {
                 Console.WriteLine("Hello from the thread pool.{0}", i);
                 i++;
-                
+
             }
-                
+
         }
-
-
     }
 }
