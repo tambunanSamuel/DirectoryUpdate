@@ -17,7 +17,7 @@ namespace com.qas.sambo.directoryupdate.SampleTest
             username = @"PIF0014";
             //password = @"Q$sAdm2n";
             password = "Q$SadM2n";
-            remoteDirectory = ".";
+            remoteDirectory = @"\Uploads";
 
             Console.WriteLine("Testing the SFTP Client");
             try
@@ -36,7 +36,7 @@ namespace com.qas.sambo.directoryupdate.SampleTest
                     }
                     //sftp.ChangeDirectory(@"\data\AUE");
 
-                    sftp.CreateDirectory("Uploads");
+                    //sftp.CreateDirectory("Uploads");
                     sftp.Disconnect();
                 }
             }
