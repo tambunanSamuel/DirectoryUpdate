@@ -20,8 +20,10 @@ namespace com.qas.sambo.sftporderdirectory.Utils
             username = @"PIF0014";
             password = "Q$SadM2n";
             remoteDirectory = ".";
-            creationDirectoryPath = @"/Uploads";
+            creationDirectoryPath = @"/Uploads/";
             localPath = @"C:\MyFiles\Temp\TestUploads\";
+            currentPath = "";
+            ftpDir = "";
         }
 
 
@@ -60,6 +62,9 @@ namespace com.qas.sambo.sftporderdirectory.Utils
         /// <param name="dir"></param>
         public void UploadFilesToFolder(string dir)
         {
+            ftpDir = dir;
+            dir = localPath + dir;
+
             try
             {
                 using (SftpClient sftp = new SftpClient(host, port, username, password))
@@ -67,23 +72,9 @@ namespace com.qas.sambo.sftporderdirectory.Utils
                     sftp.Connect();
                     Console.WriteLine("Downloading from directory: {0}", creationDirectoryPath + dir);
                     sftp.ChangeDirectory(creationDirectoryPath);
-                    var filesList = sftp.ListDirectory(dir);
-                    foreach (var file in filesList)
-                    {
-                        //int lastIndex = file.FullName.ToString().LastIndexOf('/')+1;
-                        //string lastString = file.FullName.ToString().Substring(lastIndex);
-                        string lastString = Path.GetFileName(file.FullName);
-                        Console.WriteLine("Local path is {0}", localPath + lastString);
-                        //using (var localFile = File.OpenWrite(localPath+file.FullName))
-                        //{
-                        //    Console.WriteLine("File found: {0}", file.FullName);
-                        //    sftp.DownloadFile(dir,localFile );
-                        //}
-
-
-                    }
-                    //using (var fs = new FileStream(localPath                    sftp.DownloadFile(dir,)
+                    DownloadRecursive(dir, sftp);
                     sftp.Disconnect();
+                    Console.WriteLine();
                 }
             }
             catch (SftpPermissionDeniedException spde)
@@ -93,11 +84,57 @@ namespace com.qas.sambo.sftporderdirectory.Utils
             catch (System.IO.IOException io)
             {
                 Console.WriteLine("AN error occured when trying to copy the files. Check if it cannot create files because it is already there. ");
+                Console.WriteLine(io.ToString());
             }
             catch (SftpPathNotFoundException spnfe)
             {
+                Console.WriteLine("Error with the sfTP path");
                 Console.WriteLine("Can you check if the path specified is correct?");
             }
+        }
+
+
+        /// <summary>
+        /// dir the directory to download
+        /// </summary>
+        /// <param name="dir"></param>
+        private void DownloadRecursive(string dir, SftpClient sftp)
+        {
+
+            createfolder(dir);
+            Path.GetFileName(dir);
+            var filesList = sftp.ListDirectory(dir);
+            foreach (var file in filesList)
+            {
+                string lastString = Path.GetFileName(file.FullName);
+                Console.WriteLine("Downloaded: {0} to {1}", file.FullName, currentPath + lastString);
+                Console.WriteLine("Path name is {0}", Path.GetDirectoryName(file.FullName));
+
+                if (!file.IsDirectory)
+                {
+                    using (var localFile = new FileStream(currentPath + lastString, FileMode.Create))
+                    {
+
+                        sftp.DownloadFile(file.FullName, localFile);
+
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("NEw Dir should be {0}", dir + file.FullName);
+                }
+
+            }
+            //using (var fs = new FileStream(localPath                    sftp.DownloadFile(dir,)
+        }
+
+        public void createfolder(string dir)
+        {
+
+            Console.WriteLine("Creating Folder at: {0}", dir);
+
+            System.IO.Directory.CreateDirectory(dir);
+
         }
 
         public string host { get; set; }
@@ -113,6 +150,10 @@ namespace com.qas.sambo.sftporderdirectory.Utils
         public string creationDirectoryPath { get; set; }
 
         public string localPath { get; set; }
+
+        public string currentPath { get; set; }
+
+        public string ftpDir { get; set; }
     }
 }
 

@@ -66,6 +66,7 @@ namespace com.qas.sambo.sftporderdirectory
         {
             SFTPConnector sc = new SFTPConnector();
             sc.UploadFilesToFolder(directory);
+            //sc.createfolder(directory);
         }
 
         private String[] SplitInput(String command)
