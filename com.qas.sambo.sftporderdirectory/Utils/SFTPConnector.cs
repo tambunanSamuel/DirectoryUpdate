@@ -62,7 +62,7 @@ namespace com.qas.sambo.sftporderdirectory.Utils
         /// <param name="dir"></param>
         public void UploadFilesToFolder(string dir)
         {
-            ftpDir = dir;
+            ftpDir = creationDirectoryPath + dir;
             dir = localPath + dir;
 
             try
@@ -71,8 +71,9 @@ namespace com.qas.sambo.sftporderdirectory.Utils
                 {
                     sftp.Connect();
                     Console.WriteLine("Downloading from directory: {0}", creationDirectoryPath + dir);
-                    sftp.ChangeDirectory(creationDirectoryPath);
-                    DownloadRecursive(dir, sftp);
+                    //sftp.ChangeDirectory(creationDirectoryPath);
+                    Console.WriteLine("Dir {0}, sftp {1}", ftpDir, sftp);
+                    DownloadRecursive(ftpDir, sftp, localPath);
                     sftp.Disconnect();
                     Console.WriteLine();
                 }
@@ -89,7 +90,7 @@ namespace com.qas.sambo.sftporderdirectory.Utils
             catch (SftpPathNotFoundException spnfe)
             {
                 Console.WriteLine("Error with the sfTP path");
-                Console.WriteLine("Can you check if the path specified is correct?");
+                Console.WriteLine("Can you check if the path specified is correct?: {0}",spnfe.ToString());
             }
         }
 
@@ -98,34 +99,59 @@ namespace com.qas.sambo.sftporderdirectory.Utils
         /// dir the directory to download
         /// </summary>
         /// <param name="dir"></param>
-        private void DownloadRecursive(string dir, SftpClient sftp)
+        private void DownloadRecursive(string dir, SftpClient sftp, string localDir)
         {
-
-            createfolder(dir);
-            Path.GetFileName(dir);
+            Console.WriteLine("Dir {0}", dir);
             var filesList = sftp.ListDirectory(dir);
             foreach (var file in filesList)
             {
-                string lastString = Path.GetFileName(file.FullName);
-                Console.WriteLine("Downloaded: {0} to {1}", file.FullName, currentPath + lastString);
-                Console.WriteLine("Path name is {0}", Path.GetDirectoryName(file.FullName));
-
                 if (!file.IsDirectory)
                 {
-                    using (var localFile = new FileStream(currentPath + lastString, FileMode.Create))
-                    {
+                    Console.WriteLine("==== New file would be {0}", localDir+Path.GetFileName(file.FullName));
+                    //using (var localFile = new FileStream(currentPath + lastString, FileMode.Create))
+                    //{
 
-                        sftp.DownloadFile(file.FullName, localFile);
+                    //    sftp.DownloadFile(file.FullName, localFile);
 
-                    }
+                    //}
+                    Console.WriteLine("File {0} is a file and fullname is {1}", file, Path.GetFileName(file.FullName));
                 }
                 else
                 {
-                    Console.WriteLine("NEw Dir should be {0}", dir + file.FullName);
+                    string CreationDirectory = localDir + Path.GetFileName(file.FullName) + "\\";
+                    createfolder(CreationDirectory);
+                    Console.WriteLine("New Directory to check {0}, and local {1}\n", file.FullName, CreationDirectory);
+                    DownloadRecursive(file.FullName, sftp,CreationDirectory);
+                    Console.WriteLine("File {0} is a Directory", file);
                 }
 
             }
-            //using (var fs = new FileStream(localPath                    sftp.DownloadFile(dir,)
+
+            //createfolder(dir);
+            //Path.GetFileName(dir);
+            //var filesList = sftp.ListDirectory(dir);
+            //foreach (var file in filesList)
+            //{
+            //    string lastString = Path.GetFileName(file.FullName);
+            //    Console.WriteLine("Downloaded: {0} to {1}", file.FullName, currentPath + lastString);
+            //    Console.WriteLine("Path name is {0}", Path.GetDirectoryName(file.FullName));
+
+            //    if (!file.IsDirectory)
+            //    {
+            //        using (var localFile = new FileStream(currentPath + lastString, FileMode.Create))
+            //        {
+
+            //            sftp.DownloadFile(file.FullName, localFile);
+
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("NEw Dir should be {0}", dir + file.FullName);
+            //    }
+
+            //}
+            ////using (var fs = new FileStream(localPath                    sftp.DownloadFile(dir,)
         }
 
         public void createfolder(string dir)
