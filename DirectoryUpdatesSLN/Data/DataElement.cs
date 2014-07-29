@@ -5,23 +5,39 @@ using System;
 namespace com.qas.sambo.directoryupdate.data
 {
 	public class DataElement {
+        private string elementName;
 		private string sourcePath;
 		private DateTime lastModified;
-		private string destinationPath;
+		private string[] destinationPath;
 		
 		
 		public DataElement() {
-			sourcePath = "";
-			destinationPath = "";
+            sourcePath = "";
+            destinationPath = null;
+            elementName = "";
 			lastModified = default(DateTime);
 		}
-		
-		public DataElement(string sourcePath, string destinationpath) {
+
+        public DataElement(string elementName, string sourcepath, params string[] destinationPath)
+        {
+            ElementName = elementName;
 			SourcePath = sourcePath;
 			DestinationPath = destinationPath;
 			lastModified = default(DateTime);
 		}
-		
+
+        public string ElementName
+        {
+            get 
+            {
+                return elementName;
+            }
+            set
+            {
+                elementName = value;
+            }
+        }
+
 		public string SourcePath
 		{
 			get
@@ -46,7 +62,7 @@ namespace com.qas.sambo.directoryupdate.data
 			}
 		}
 		
-		public string DestinationPath
+		public string[] DestinationPath
 		{
 			get
 			{
@@ -57,5 +73,23 @@ namespace com.qas.sambo.directoryupdate.data
 				destinationPath = value;
 			}
 		}
+
+        public override string ToString()
+        {
+            string s = "\nElement name: " + ElementName;
+            s = s + "\n Source Path: " + SourcePath;
+            if (DestinationPath != null)
+            {
+                foreach (string dest in DestinationPath)
+                    s = s + "\n Destination Path: " + dest;
+            }
+            else
+            {
+                s = s + "\n Destination Path: NULL";
+            }
+            s = s +"\n Last Modified: " + LastModified;
+            return s;
+        }
+        
 	}
 }

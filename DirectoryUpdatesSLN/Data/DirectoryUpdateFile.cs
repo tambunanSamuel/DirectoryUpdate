@@ -6,12 +6,16 @@ using com.qas.sambo.directoryupdate;
 using Microsoft.VisualBasic.FileIO;
 using System.Reflection;
 
-namespace com.qas.sambo.directoryupdate.data
+namespace com.qas.sambo.directoryupdate.Data
 {
 	public class DirectoryUpdateFile 
 	{
         private string logFileDirectory;
 
+        public DirectoryUpdateFile()
+        {
+
+        }
 		public static void Main() 
 		{
 		
@@ -23,22 +27,21 @@ namespace com.qas.sambo.directoryupdate.data
 		//	df.SourcePath=@"\\Product\product\World Data\NZL\v4";
 		
 		
-			Console.WriteLine("Copying dir from {0} to {1}", dirFrom, dirTo);
-			//df.CopyDirectories(dirFrom,dirTo);
-            Console.WriteLine(dirTo);
-            dirTo = " ";
-            //dirTo = (dirTo.Length-1!='\\') ? 
-            Console.WriteLine("is the last string \\? {0}", dirTo.ElementAt(dirTo.Length - 1) == '\\');
-            dirTo = (dirTo.ElementAt(dirTo.Length - 1)) == '\\' ? dirTo : dirTo + "\\"; 
-            Console.WriteLine("Last element of dirTo is {0}",dirTo.ElementAt(dirTo.Length-1));
-            dirTo = dirTo + "\\";
-            Console.WriteLine("is the last string \\? {0}", dirTo.ElementAt(dirTo.Length-1) == '\\');
+            //Console.WriteLine("Copying dir from {0} to {1}", dirFrom, dirTo);
+            ////df.CopyDirectories(dirFrom,dirTo);
+            //Console.WriteLine(dirTo);
+            //dirTo = " ";
+            ////dirTo = (dirTo.Length-1!='\\') ? 
+            //Console.WriteLine("is the last string \\? {0}", dirTo.ElementAt(dirTo.Length - 1) == '\\');
+            //dirTo = (dirTo.ElementAt(dirTo.Length - 1)) == '\\' ? dirTo : dirTo + "\\"; 
+            //Console.WriteLine("Last element of dirTo is {0}",dirTo.ElementAt(dirTo.Length-1));
+            //dirTo = dirTo + "\\";
+            //Console.WriteLine("is the last string \\? {0}", dirTo.ElementAt(dirTo.Length-1) == '\\');
 			
 			try {
 				string dirpath = @"\\Product\product\World Data";
 				dirpath = @"\\Product\product\World Data\NZL\v4";
 				List<string> dirs = new List<string>(Directory.EnumerateDirectories(dirpath));
-				Console.WriteLine("ff" == "fg");
                 DateTime dtTest = new DateTime(2014,2,05);
          
 				foreach (var dir in dirs)
@@ -100,7 +103,7 @@ namespace com.qas.sambo.directoryupdate.data
 		}
 		
 		
-		private void CopyDirectories(string SourceDir, string NewPath)
+		public void CopyDirectories(string SourceDir, string NewPath)
 		{
 			// Using Visual Basic 
 			try {
@@ -118,11 +121,14 @@ namespace com.qas.sambo.directoryupdate.data
 		}
 		
 		
-		///
-		/// CheckIfNewer will check whether the date modified of Directory dir
-		/// is newer than the dtValue provided
-		///
-		private bool CheckIfNewer(String dir, DateTime dtValue)
+	
+        /// <summary>
+        /// CheckIfNewer will check if the directory dir is newer than dtValue
+        /// </summary>
+        /// <param name="dir">the URL directory</param>
+        /// <param name="dtValue">Date to be checked</param>
+        /// <returns></returns>
+        private bool CheckIfNewer(String dir, DateTime dtValue)
 		{
 			DateTime dtCurrent = Directory.GetCreationTime(dir); 
 			
@@ -138,6 +144,29 @@ namespace com.qas.sambo.directoryupdate.data
 		}
 
         /// <summary>
+        /// Will return a list of all directories in dir that is newer than dt
+        /// </summary>
+        /// <param name="dir">directory path</param>
+        /// <param name="dt">date</param>
+        /// <returns></returns>
+        public List<String> ReturnDirectories(string dir, DateTime dt)
+        {
+            List<string> AllDir = new List<string>(Directory.EnumerateDirectories(dir));
+
+            List<string> NewerDir = new List<string>();
+
+            foreach(var dirToCheck in AllDir)
+            {
+                if (CheckIfNewer(dirToCheck,dt))
+                {
+                    NewerDir.Add(dirToCheck);
+                }
+            }
+            return NewerDir;
+        }
+
+
+        /// <summary>
         /// This will write to the log file with a file called Log.txt
         /// in the directory of LogFileDirectory
         /// </summary>
@@ -149,7 +178,7 @@ namespace com.qas.sambo.directoryupdate.data
                 Console.WriteLine("Please set the Log File Directory");
                 Console.WriteLine("Executing Assembly is {0}", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
                 Console.WriteLine("Get Entry Assembly is {0}", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
-
+                logFileDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             } else
             {
 

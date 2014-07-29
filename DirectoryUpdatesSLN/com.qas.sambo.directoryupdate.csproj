@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>com.qas.sambo.directoryupdate.SampleTest.SFTPExampleClass</StartupObject>
+    <StartupObject>com.qas.sambo.directoryupdate.DirectoryUpdate</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -44,6 +44,7 @@
     <Compile Include="Data\DataElement.cs" />
     <Compile Include="Data\DirectoryUpdateFile.cs" />
     <Compile Include="Data\StaticDirectoryListings.cs" />
+    <Compile Include="DirectoryUpdate.cs" />
     <Compile Include="SampleTest\AppSettingExample.cs" />
     <Compile Include="SampleTest\ASPCreation.cs" />
     <Compile Include="SampleTest\FileCreation.cs" />
@@ -67,6 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ThingsToDo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Testing\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
