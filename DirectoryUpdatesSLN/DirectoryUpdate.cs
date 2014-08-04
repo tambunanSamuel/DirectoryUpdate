@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using com.qas.sambo.directoryupdate.Utils;
 
 
 namespace com.qas.sambo.directoryupdate
@@ -152,7 +153,7 @@ Q to quit");
                         Task<long> OriginalDestSize = new Task<long>(() => DirectorySize(s));
                         OriginalDestSize.Start();
                         OriginalDestSize.Wait();
-
+                        long OrgSize = OriginalDestSize.Result;
                         // Copying the directory
                         Task task2 = new Task(() => duf.CopyDirectories(s, newDestPath));
                         task2.Start();
@@ -162,14 +163,23 @@ Q to quit");
 
                         while (!task2.IsCompleted)
                         {
-                            Console.Write(".");
-                            Thread.Sleep(2000);
+                            Console.Write("Original Destination Size is {0}", OrgSize);
+                            //Task<long> NewDirectorySize = new Task<long>(() => DirectorySize(newDestPath));
+                            //NewDirectorySize.Start();
+                            //NewDirectorySize.Wait();
+
+                            //long test = NewDirectorySize.Result;
+                            //NewDirectorySize.Dispose();
+                            long test = DirectorySize(newDestPath);
+                            Console.WriteLine("New Size is {0}", test);
+                            Console.WriteLine("It is {0:##}% Complete", (float)test / OrgSize);
+                            Thread.Sleep(5000);
                         }
 
                         task2.Wait();
                         Console.WriteLine();
                         UpdateDataElement(currDe, Directory.GetCreationTime(s));
-                        ZipFile(destPath);
+                        ZipFile(newDestPath);
                     }
 
                     // 1) Download the dataset to the correct path 
@@ -186,7 +196,13 @@ Q to quit");
         /// <param name="destPath">The path to be zipped and </param>
         private void ZipFile(string destPath)
         {
+            ZipEncryption ze = new ZipEncryption();
             Console.WriteLine("Will zip up {0}", destPath);
+
+            String randomGen = ze.EncryptionPasswordGenerator(8);
+            String newZip = Path.GetDirectoryName(destPath) + "\\" + Path.GetFileName(destPath) + ".zip";
+            ze.ZipWithEncryption(destPath,randomGen,newZip);
+            //Console.WriteLine("Path is {0}", Path.GetDirectoryName(destPath)+"\\"+Path.GetFileName(destPath)+".zip");
             ///throw new NotImplementedException();
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ionic.Zip;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,8 +41,7 @@ namespace com.qas.sambo.directoryupdate.Utils
         }
 
         /// <summary>
-        /// Will return the character either with a lower case or upper case. 
-        /// 
+        /// Will return the character either with a lower case or upper case
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
@@ -51,6 +51,26 @@ namespace com.qas.sambo.directoryupdate.Utils
                 return CharacterList.ElementAt(CharacterToChoose - (CharactersNonAlphabet.Length + CharacterAlphabet.Length));
             else
                 return Char.ToUpper(CharacterList.ElementAt(CharacterToChoose));
+        }
+
+        /// <summary>
+        /// Will zip up pathToZip with password password and output the .zip file 
+        /// at path zipPath
+        /// </summary>
+        /// <param name="pathToZip">path to zip</param>
+        /// <param name="password">Password</param>
+        /// <param name="zipPath">Output Path (Has to be .zip format. e.g. Output.zip</param>
+        public void ZipWithEncryption(string pathToZip, string password, string zipPath)
+        {
+            using (ZipFile zip = new ZipFile())
+            {
+                zip.Encryption = EncryptionAlgorithm.WinZipAes256;
+                zip.Password = password;
+                Console.WriteLine("Adding Directory of path");
+                zip.AddDirectory(pathToZip);
+                Console.WriteLine("Saving Files");
+                zip.Save(zipPath);
+            }
         }
 
         public static void Main()

@@ -26,13 +26,13 @@ namespace com.qas.sambo.directoryupdate.data
 			NZLde = new DataElement();
 			NZLde.SourcePath = @"\\Product\product\World Data\NZL\v4";
             NZLde.DestinationPath = new String[] { @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\NZL", @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder2\NZL" };
-            NZLde.LastModified = new DateTime(2014, 2, 05);
+            NZLde.LastModified = new DateTime(2014, 5, 05);
             NZLde.ElementName = "NZL";
 
             AUSde = new DataElement();
             AUSde.SourcePath = @"\\Product\product\World Data\Aus\v4";
             AUSde.DestinationPath = new String[] {@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUS"};
-            AUSde.LastModified = new DateTime(2014, 2, 05);
+            AUSde.LastModified = new DateTime(2014, 5, 05);
             AUSde.ElementName = "AUS";
 
             DeList = new Dictionary<string, DataElement>();
