@@ -41,7 +41,7 @@ Q to quit");
             while (!command.Equals("q"))
             {
 
-                switch (command)
+                switch (Inputs[0])
                 {
                     case "d":
                         Console.WriteLine("Will download");
@@ -61,15 +61,57 @@ Q to quit");
                     case "s":
                         ShowDatasetsList();
                         break;
+                    case "t":
+                        if (Inputs[1].Equals(""))
+                        {
+                            Console.WriteLine("Second parameter is empty");
+                            Console.WriteLine("Please input a second parameter");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Finding size of Directory: ", Inputs[1]);
+                            Console.WriteLine("Size is {0}", DirectorySize(Inputs[1]));
+                            //      testc(Inputs[1]);
+                            //  testc(@"\\Product\product\World Data\NZL\v4\2014 06-June-Q");
+                        }
+
+                        break;
                     default:
-                        
+
                         break;
                 }
 
                 Console.WriteLine("Insert Command:");
                 command = Console.ReadLine().ToLower();
+                Inputs = SplitInput(command);
             }
 
+        }
+
+        /// <summary>
+        /// Returns the directory size of directory dir. If -1 is returned then something would have gone wrong
+        /// 
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        private long DirectorySize(string dir)
+        {
+            long DirSize = -1;
+            try
+            {
+                DirectoryUpdateFile duf = new DirectoryUpdateFile();
+                DirSize = duf.GetDirectorySize(dir);
+                //Console.WriteLine("Bit size is {0}", String.Format("{0:n0}", duf.GetDirectorySize(dir)));
+            }
+            catch (System.IO.DirectoryNotFoundException sdnf)
+            {
+                Console.WriteLine("Directory not found {0}", sdnf.Message);
+            }
+            catch (System.UnauthorizedAccessException ue)
+            {
+                Console.WriteLine("Problem accessing directory {0}", ue.Message);
+            }
+            return DirSize;
         }
 
         /// <summary>
@@ -81,40 +123,59 @@ Q to quit");
         /// </summary>
         private void DownloadDatasetsList()
         {
-            Console.WriteLine("Downloading datasets");
+
             foreach (var dicList in StaticDirectoryListings.DeList)
             {
                 //Console.WriteLine("Key is {0}", dicList.Key);
-                DataElement currDe= dicList.Value;
-                foreach (var s in duf.ReturnDirectories(currDe.SourcePath, currDe.LastModified))
+                DataElement currDe = dicList.Value;
+                Task<List<string>> task1 = new Task<List<string>>(() => duf.ReturnDirectories(currDe.SourcePath, currDe.LastModified));
+                task1.Start();
+                Console.WriteLine("Reading directories and files");
+                while (!task1.IsCompleted)
                 {
-                    //Console.WriteLine("Copying Directory {0} ===", s);
+                    Console.Write(".");
+                    Thread.Sleep(2000);
+                }
+                task1.Wait();
+                Console.WriteLine();
+                List<string> directoriesList = task1.Result;
+                foreach (var s in directoriesList)
+                {
                     foreach (var destPath in currDe.DestinationPath)
                     {
-                        var newDestPath = destPath + Path.GetFileName(s);
+                        var newDestPath = destPath + "\\" + Path.GetFileName(s);
                         Console.WriteLine("NewDestPath is {0}", newDestPath);
-                        //duf.CopyDirectories(s, destPath);
-                        Console.WriteLine("Copying {0} into {1}", s, destPath);
-                        //Task task2 = new Task(() => duf.CopyDirectories(s, destPath));
-                        ////Task task1 = new Task(() => UpdateDataElement(currDe, Directory.GetCreationTime(s)));
-                        ////task1.Start();
-                        //task2.Start();
-                        //while (!task2.IsCompleted)
-                        //{
-                        //    Console.Write(".");
-                        //    Thread.Sleep(2000);
-                        //}
-                            
-                        //task2.Wait();
-                        //Console.WriteLine();
-                        //UpdateDataElement(currDe, Directory.GetCreationTime(s));
+                        
+                        Console.WriteLine("Copying {0} into {1}", s, newDestPath);
+
+                        //Getting size of directory
+                        Task<long> OriginalDestSize = new Task<long>(() => DirectorySize(s));
+                        OriginalDestSize.Start();
+                        OriginalDestSize.Wait();
+
+                        // Copying the directory
+                        Task task2 = new Task(() => duf.CopyDirectories(s, newDestPath));
+                        task2.Start();
+
+                        //Task<long> newDestSize = new Task<long>(() => DirectorySize(newDestPath));
+                        //newDestSize.Start();
+
+                        while (!task2.IsCompleted)
+                        {
+                            Console.Write(".");
+                            Thread.Sleep(2000);
+                        }
+
+                        task2.Wait();
+                        Console.WriteLine();
+                        UpdateDataElement(currDe, Directory.GetCreationTime(s));
                         ZipFile(destPath);
                     }
-                      
+
                     // 1) Download the dataset to the correct path 
-                    
+
                 }
-                    
+
 
             }
         }
@@ -131,7 +192,7 @@ Q to quit");
 
         private void UpdateDataElement(DataElement currD, DateTime dateCreated)
         {
-            Console.WriteLine("Updating Data Element so that the lastUpdated will be teh date of the dataset {0}",dateCreated.ToString());
+            Console.WriteLine("Updating Data Element so that the lastUpdated will be teh date of the dataset {0}", dateCreated.ToString());
             currD.LastModified = dateCreated;
             //throw new NotImplementedException();
         }
@@ -171,7 +232,8 @@ Q to quit");
             }
             else
             {
-                Inputs[0] = "";
+                //Inputs[0] = "";
+                Inputs[0] = command;
                 Inputs[1] = "";
             }
 
