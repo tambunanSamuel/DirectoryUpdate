@@ -53,6 +53,7 @@
     <Compile Include="SampleTest\StopJoin.cs" />
     <Compile Include="SampleTest\ThreadsExample.cs" />
     <Compile Include="SampleTest\ZipTestFile.cs" />
+    <Compile Include="Utils\FileWriter.cs" />
     <Compile Include="Utils\ZipEncryption.cs" />
   </ItemGroup>
   <ItemGroup>

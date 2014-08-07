@@ -77,6 +77,11 @@ Q to quit");
                         }
 
                         break;
+                    case "e":
+                        Console.WriteLine("Testing FileWriter");
+                        FileWriter fs = new FileWriter();
+                        fs.AppendToFile(fs.CreateDetails("zip1.zip", "fjoiej"));
+                        break;
                     default:
 
                         break;
@@ -190,6 +195,8 @@ Q to quit");
             }
         }
 
+
+
         /// <summary>
         /// Will zip up the file and encrypt it
         /// </summary>
@@ -202,8 +209,17 @@ Q to quit");
             String randomGen = ze.EncryptionPasswordGenerator(8);
             String newZip = Path.GetDirectoryName(destPath) + "\\" + Path.GetFileName(destPath) + ".zip";
             ze.ZipWithEncryption(destPath,randomGen,newZip);
+
+            writeToLog(newZip, randomGen);
             //Console.WriteLine("Path is {0}", Path.GetDirectoryName(destPath)+"\\"+Path.GetFileName(destPath)+".zip");
             ///throw new NotImplementedException();
+        }
+
+        private void writeToLog(string newZip, string randomGen)
+        {
+            FileWriter fw = new FileWriter();
+            fw.AppendToFile("Created at" + DateTime.Now.ToShortDateString());
+            fw.AppendToFile(fw.CreateDetails(newZip, randomGen));
         }
 
         private void UpdateDataElement(DataElement currD, DateTime dateCreated)

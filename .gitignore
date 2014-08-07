@@ -8,15 +8,7 @@ bin/
 obj/
 #Ignore Zipped
 Zipped/
-<<<<<<< HEAD
-=======
-
-#Ignore Zipped
-Zipped/
->>>>>>> Master
-<<<<<<< HEAD
 *.v12*
 *.config
-=======
-*.v12*
->>>>>>> remotes/origin/master
+
+
