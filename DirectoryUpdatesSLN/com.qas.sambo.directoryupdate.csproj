@@ -33,16 +33,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>com.qas.sambo.directoryupdate.DirectoryUpdate</StartupObject>
+    <StartupObject>com.qas.sambo.directoryupdate.data.StaticDirectoryListings</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DataElement.cs" />
     <Compile Include="Data\DirectoryUpdateFile.cs" />
+    <Compile Include="Data\JsonStates.cs" />
     <Compile Include="Data\StaticDirectoryListings.cs" />
     <Compile Include="DirectoryUpdate.cs" />
     <Compile Include="SampleTest\AppSettingExample.cs" />
@@ -61,6 +63,9 @@
       <HintPath>References\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Renci.SshNet">
       <HintPath>References\Renci.SshNet.dll</HintPath>
     </Reference>

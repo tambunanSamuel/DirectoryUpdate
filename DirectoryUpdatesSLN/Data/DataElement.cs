@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 
 /// This class is used as a Data Object for the Data Directory application
@@ -8,7 +9,7 @@ namespace com.qas.sambo.directoryupdate.data
         private string elementName;
 		private string sourcePath;
 		private DateTime lastModified;
-		private string[] destinationPath;
+        private List<string> destinationPath;
 		
 		
 		public DataElement() {
@@ -22,7 +23,7 @@ namespace com.qas.sambo.directoryupdate.data
         {
             ElementName = elementName;
 			SourcePath = sourcePath;
-			DestinationPath = destinationPath;
+			DestinationPath = new List<string>(destinationPath);
 			lastModified = default(DateTime);
 		}
 
@@ -61,8 +62,8 @@ namespace com.qas.sambo.directoryupdate.data
 				lastModified = value;
 			}
 		}
-		
-		public string[] DestinationPath
+
+        public List<string> DestinationPath
 		{
 			get
 			{

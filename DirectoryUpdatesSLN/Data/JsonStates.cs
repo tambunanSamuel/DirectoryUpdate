@@ -10,8 +10,8 @@ namespace com.qas.sambo.directoryupdate.Data
     class JsonStates
     {
         public string Dataset { get; set; }
-        public string ServerLocation { get; set; }
+        public string SourcePath { get; set; }
         public List<string> DownloadLocation { get; set; }
-        public string LastModifiedDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
     }
 }
