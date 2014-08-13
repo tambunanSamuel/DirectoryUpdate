@@ -17,31 +17,26 @@ namespace com.qas.sambo.directoryupdate.data
 
         private static string FilePath;
 
-        public static Dictionary<string, DataElement> DeList;
-
-        /* public StaticDirectoryListings() 
-        {
-            NZLde = new DataElement();
-        } */
+        private static Dictionary<string, DataElement> DeList;
 
         public static void init()
         {
-            // NZL datasets
-            NZLde = new DataElement();
-            NZLde.SourcePath = @"\\Product\product\World Data\NZL\v4";
-            NZLde.DestinationPath = new List<string> { @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\NZL", @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder2\NZL" };
-            NZLde.LastModified = new DateTime(2014, 5, 05);
-            NZLde.ElementName = "NZL";
+            //// NZL datasets
+            //NZLde = new DataElement();
+            //NZLde.SourcePath = @"\\Product\product\World Data\NZL\v4";
+            //NZLde.DestinationPath = new List<string> { @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\NZL", @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder2\NZL" };
+            //NZLde.LastModified = new DateTime(2014, 5, 05);
+            //NZLde.ElementName = "NZL";
 
-            AUSde = new DataElement();
-            AUSde.SourcePath = @"\\Product\product\World Data\Aus\v4";
-            AUSde.DestinationPath = new List<string> { @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUS" };
-            AUSde.LastModified = new DateTime(2014, 5, 05);
-            AUSde.ElementName = "AUS";
+            //AUSde = new DataElement();
+            //AUSde.SourcePath = @"\\Product\product\World Data\Aus\v4";
+            //AUSde.DestinationPath = new List<string> { @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUS" };
+            //AUSde.LastModified = new DateTime(2014, 5, 05);
+            //AUSde.ElementName = "AUS";
 
-            DeList = new Dictionary<string, DataElement>();
-            DeList.Add("NZL", NZLde);
-            DeList.Add("AUS", AUSde);
+            //DeList = new Dictionary<string, DataElement>();
+            //DeList.Add("NZL", NZLde);
+            //DeList.Add("AUS", AUSde);
 
 
             //Serializing to a file
@@ -76,6 +71,10 @@ namespace com.qas.sambo.directoryupdate.data
 
         }
 
+        /// <summary>
+        /// Will update the file with the Dictionary
+        /// </summary>
+        /// <param name="DeList">the dictionary list to update the file </param>
         public static void UpdateFile(Dictionary<string,DataElement> DeList)
         {
             System.IO.File.WriteAllText(FilePath, JsonConvert.SerializeObject(DeList, Formatting.Indented));
@@ -89,15 +88,21 @@ namespace com.qas.sambo.directoryupdate.data
             CreateFile();
             Console.WriteLine("Testing if FIles exists {0}", CheckFileExist());
 
+            Dictionary<string, DataElement> test = new Dictionary<string, DataElement>();
             UpdateFile(DeList);
-            ReadJson();
+            test = ReadJson();
+
+            foreach (string s in test.Keys)
+            {
+                Console.WriteLine("Key is {0}", s);
+            }
         }
 
         /// <summary>
-        /// Returns a Dictionary from the File in the FilePath
+        /// Returns a Dictionary that contains the information from the File in the FilePath
         /// </summary>
         /// <returns></returns>
-        private static Dictionary<string, DataElement> ReadJson()
+        public static Dictionary<string, DataElement> ReadJson()
         {
             DataElement test = JsonConvert.DeserializeObject<DataElement>(System.IO.File.ReadAllText(FilePath));
             string fileRead = System.IO.File.ReadAllText(FilePath);

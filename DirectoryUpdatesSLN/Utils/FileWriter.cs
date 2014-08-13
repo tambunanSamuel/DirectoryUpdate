@@ -25,7 +25,7 @@ namespace com.qas.sambo.directoryupdate.Utils
             ret += "\nPassword: " + Password;
        
             ret += "\nZip File is: " + zipName;
-            ret += "\n To extract it please use the following password" + password;
+            ret += "\n To extract it please use the following password: " + password;
             ret += "\n==============\n";
 
             return ret;

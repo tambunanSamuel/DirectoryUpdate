@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>com.qas.sambo.directoryupdate.data.StaticDirectoryListings</StartupObject>
+    <StartupObject>com.qas.sambo.directoryupdate.SampleTest.MockZipFileCreation</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -51,11 +51,13 @@
     <Compile Include="SampleTest\ASPCreation.cs" />
     <Compile Include="SampleTest\FileCreation.cs" />
     <Compile Include="SampleTest\LoopControlCommand.cs" />
+    <Compile Include="SampleTest\MockZipFileCreation.cs" />
     <Compile Include="SampleTest\SFTPExampleClass.cs" />
     <Compile Include="SampleTest\StopJoin.cs" />
     <Compile Include="SampleTest\ThreadsExample.cs" />
     <Compile Include="SampleTest\ZipTestFile.cs" />
     <Compile Include="Utils\FileWriter.cs" />
+    <Compile Include="Utils\FolderScan.cs" />
     <Compile Include="Utils\ZipEncryption.cs" />
   </ItemGroup>
   <ItemGroup>

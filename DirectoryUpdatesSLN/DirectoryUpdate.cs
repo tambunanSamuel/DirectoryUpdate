@@ -15,6 +15,8 @@ namespace com.qas.sambo.directoryupdate
     class DirectoryUpdate
     {
         DirectoryUpdateFile duf;
+        Dictionary<string, DataElement> dictionaryList;
+
         public static void Main()
         {
             StaticDirectoryListings.init();
@@ -47,17 +49,8 @@ Q to quit");
                     case "d":
                         Console.WriteLine("Will download");
                         DownloadDatasetsList();
-                        //Task1
-                        //Task task1 = new Task(new Action(DownloadDatasetsList));
-                        //task1.Start();
-                        //Console.WriteLine("Downloading\n");
-                        //while (!task1.IsCompleted)
-                        //{
-                        //    Console.Write(".");
-                        //    Thread.Sleep(2000);
-                        //}
-
                         Console.WriteLine("Finished Downloading");
+                        StaticDirectoryListings.UpdateFile(dictionaryList);
                         break;
                     case "s":
                         ShowDatasetsList();
@@ -72,8 +65,6 @@ Q to quit");
                         {
                             Console.WriteLine("Finding size of Directory: ", Inputs[1]);
                             Console.WriteLine("Size is {0}", DirectorySize(Inputs[1]));
-                            //      testc(Inputs[1]);
-                            //  testc(@"\\Product\product\World Data\NZL\v4\2014 06-June-Q");
                         }
 
                         break;
@@ -129,8 +120,8 @@ Q to quit");
         /// </summary>
         private void DownloadDatasetsList()
         {
-
-            foreach (var dicList in StaticDirectoryListings.DeList)
+            dictionaryList = StaticDirectoryListings.ReadJson();
+            foreach (var dicList in dictionaryList)
             {
                 //Console.WriteLine("Key is {0}", dicList.Key);
                 DataElement currDe = dicList.Value;
@@ -151,7 +142,7 @@ Q to quit");
                     {
                         var newDestPath = destPath + "\\" + Path.GetFileName(s);
                         Console.WriteLine("NewDestPath is {0}", newDestPath);
-                        
+
                         Console.WriteLine("Copying {0} into {1}", s, newDestPath);
 
                         //Getting size of directory
@@ -208,7 +199,7 @@ Q to quit");
 
             String randomGen = ze.EncryptionPasswordGenerator(8);
             String newZip = Path.GetDirectoryName(destPath) + "\\" + Path.GetFileName(destPath) + ".zip";
-            ze.ZipWithEncryption(destPath,randomGen,newZip);
+            ze.ZipWithEncryption(destPath, randomGen, newZip);
 
             writeToLog(newZip, randomGen);
             //Console.WriteLine("Path is {0}", Path.GetDirectoryName(destPath)+"\\"+Path.GetFileName(destPath)+".zip");
@@ -232,7 +223,7 @@ Q to quit");
         private void ShowDatasetsList()
         {
             Console.WriteLine("Will show datasets");
-            foreach (var dict in StaticDirectoryListings.DeList)
+            foreach (var dict in StaticDirectoryListings.ReadJson())
             {
                 Console.WriteLine("\nElement Key:{0}", dict.Key);
                 Console.WriteLine(dict.Value);
