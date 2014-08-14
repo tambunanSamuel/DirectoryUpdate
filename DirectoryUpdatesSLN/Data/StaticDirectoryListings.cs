@@ -14,6 +14,7 @@ namespace com.qas.sambo.directoryupdate.data
         private static DataElement NZGde;
         private static DataElement AUEde;
         private static DataElement SGFde;
+        private static DataElement USAde;
 
         private static string FilePath;
 
@@ -21,26 +22,72 @@ namespace com.qas.sambo.directoryupdate.data
 
         public static void init()
         {
-            //// NZL datasets
-            //NZLde = new DataElement();
-            //NZLde.SourcePath = @"\\Product\product\World Data\NZL\v4";
-            //NZLde.DestinationPath = new List<string> { @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\NZL", @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder2\NZL" };
-            //NZLde.LastModified = new DateTime(2014, 5, 05);
-            //NZLde.ElementName = "NZL";
 
-            //AUSde = new DataElement();
-            //AUSde.SourcePath = @"\\Product\product\World Data\Aus\v4";
-            //AUSde.DestinationPath = new List<string> { @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUS" };
-            //AUSde.LastModified = new DateTime(2014, 5, 05);
-            //AUSde.ElementName = "AUS";
-
-            //DeList = new Dictionary<string, DataElement>();
-            //DeList.Add("NZL", NZLde);
-            //DeList.Add("AUS", AUSde);
-
+           // CreateDataElements();
 
             //Serializing to a file
             FilePath = ReadSetting("JsonFileLocation");
+
+            //Update
+            //UpdateFile(DeList);
+        }
+
+        private static void CreateDataElements()
+        {
+            // NZL datasets
+            NZLde = new DataElement();
+            NZLde.SourcePath = @"\\Product\product\World Data\NZL\v4";
+            NZLde.DestinationPath = new List<string> { @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\NZL", @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder2\NZL" };
+            NZLde.LastModified = new DateTime(2014, 5, 05);
+            NZLde.ElementName = "NZL";
+
+            AUSde = new DataElement();
+            AUSde.SourcePath = @"\\Product\product\World Data\Aus\v4";
+            AUSde.DestinationPath = new List<string> { @"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUS" };
+            AUSde.LastModified = new DateTime(2014, 5, 05);
+            AUSde.ElementName = "AUS";
+
+            AUGde = new DataElement();
+            AUGde.SourcePath = @"\\Product\product\World Data\AUG";
+            AUGde.DestinationPath = new List<string> {@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUG"};
+            AUGde.LastModified = new DateTime(2014, 5, 05);
+            AUGde.ElementName = "AUG";
+
+            AUEde = new DataElement();
+            AUEde.SourcePath = @"\\Product\product\World Data\AUE";
+            AUEde.DestinationPath = new List<string> {@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUE"};
+            AUEde.LastModified = new DateTime(2014, 5, 05);
+            AUEde.ElementName = "AUE";
+
+            NZGde = new DataElement();
+            NZGde.SourcePath = @"\\Product\product\World Data\NZG\v4";
+            NZGde.DestinationPath = new List<string> {@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\NZG"};
+            NZGde.LastModified = new DateTime(2014, 5, 05);
+            NZGde.ElementName = "NZG";
+
+            SGFde = new DataElement();
+            SGFde.SourcePath = @"\\Product\product\World Data\SGF\v4";
+            SGFde.DestinationPath = new List<string> {@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\SGF"};
+            SGFde.LastModified = new DateTime(2014, 5, 05);
+            SGFde.ElementName = "SGF";
+
+            //USA should only dl BMs
+                     USAde = new DataElement();
+            USAde.SourcePath = @"\\Product\product\World Data\Usa\v4";
+            USAde.DestinationPath = new List<string> {@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\USA"};
+            USAde.LastModified = new DateTime(2014, 5, 05);
+            USAde.ElementName = "USA";
+
+
+            DeList = new Dictionary<string, DataElement>();
+            DeList.Add("NZL", NZLde);
+            DeList.Add("AUS", AUSde);
+            DeList.Add("AUG",AUGde);
+            DeList.Add("AUE",AUEde);
+            DeList.Add("NZG",NZGde);
+            DeList.Add("SGF",SGFde);
+            DeList.Add("USA", USAde);
+
         }
 
         private static string ReadSetting(string key)

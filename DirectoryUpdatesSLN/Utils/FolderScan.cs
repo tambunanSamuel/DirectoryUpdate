@@ -41,7 +41,7 @@ namespace com.qas.sambo.directoryupdate.Utils
 
         public void WriteHasAddressDataSubdirectory(string path)
         {
-            List<string> list = HasAddressDataSubdirectory(path);
+            List<string> list = GetAddressDataSubdirectory(path);
             Console.WriteLine("Checking path {0}", path);
             foreach(string s in list)
             {
@@ -68,7 +68,7 @@ namespace com.qas.sambo.directoryupdate.Utils
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public List<string> HasAddressDataSubdirectory(string path)
+        public List<string> GetAddressDataSubdirectory(string path)
         {
             List<string> returnedValue = new List<string>();
             foreach(string dir in DirectoryList)
@@ -90,7 +90,7 @@ namespace com.qas.sambo.directoryupdate.Utils
         /// <returns></returns>
         public bool ContainsSubFolder(string path, string folder)
         {
-            return Directory.Exists(path + "\\" + folder);
+            return Directory.Exists(Path.Combine(path,folder));
         }
     }
 }

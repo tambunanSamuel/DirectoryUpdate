@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using com.qas.sambo.directoryupdate.Utils;
+using System.Configuration;
 
 
 namespace com.qas.sambo.directoryupdate
@@ -16,19 +17,45 @@ namespace com.qas.sambo.directoryupdate
     {
         DirectoryUpdateFile duf;
         Dictionary<string, DataElement> dictionaryList;
+        String zipFileLocation, zipFileLocationKey = "ZipFileLocation";
 
         public static void Main()
         {
             StaticDirectoryListings.init();
+
             DirectoryUpdate du = new DirectoryUpdate();
+            du.init();
+            du.checks();
             du.RunProgram();
 
         }
 
+        private void checks()
+        {
+            // Put a check to ensure that zipFileLocation is a valid location
+        }
+
+        private void init()
+        {
+
+            try
+            {
+                var appSettings = ConfigurationManager.AppSettings;
+                zipFileLocation = appSettings[zipFileLocationKey] ?? @"C:\";
+
+            }
+            catch (ConfigurationErrorsException cee)
+            {
+                Console.WriteLine("Error reading app setting. Please ensure that ZipFileLocation is set");
+            }
+        }
+
+
+
         /// <summary>
         /// To run the Program
         /// </summary>
-        public void RunProgram()
+        private void RunProgram()
         {
             Console.WriteLine("==== Welcome to the Automatic Download Datasets Application ====");
             Console.WriteLine(@"Commands are:
@@ -72,6 +99,17 @@ Q to quit");
                         Console.WriteLine("Testing FileWriter");
                         FileWriter fs = new FileWriter();
                         fs.AppendToFile(fs.CreateDetails("zip1.zip", "fjoiej"));
+                        break;
+
+                    case "g":
+                        Console.WriteLine("Testing Zipping of Path");
+                        Console.WriteLine(Path.Combine(@"C:\MyFiles", "CD IMages"));
+                        Console.WriteLine(Path.Combine(@"C:\MyFiles", "\\CD IMages"));
+                        Console.WriteLine(Path.Combine(@"C:\MyFiles\", "CD IMages"));
+                        Console.WriteLine(Path.Combine(@"C:\MyFiles\\", "\\CD IMages"));
+                        Console.WriteLine(Path.Combine(@"C:\MyFile\", "CD IMages"));
+                        CheckSubDirectories(@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUS\2014 04-April-Q","AUS");
+                        CheckSubDirectories(@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder2\NZL\2014 06-June-Q","NZL");
                         break;
                     default:
 
@@ -125,6 +163,8 @@ Q to quit");
             {
                 //Console.WriteLine("Key is {0}", dicList.Key);
                 DataElement currDe = dicList.Value;
+                string dataset = currDe.ElementName;
+
                 Task<List<string>> task1 = new Task<List<string>>(() => duf.ReturnDirectories(currDe.SourcePath, currDe.LastModified));
                 task1.Start();
                 Console.WriteLine("Reading directories and files");
@@ -175,7 +215,8 @@ Q to quit");
                         task2.Wait();
                         Console.WriteLine();
                         UpdateDataElement(currDe, Directory.GetCreationTime(s));
-                        ZipFile(newDestPath);
+                        //ZipFile(newDestPath);
+                        CheckSubDirectories(newDestPath, dataset);
                     }
 
                     // 1) Download the dataset to the correct path 
@@ -186,24 +227,78 @@ Q to quit");
             }
         }
 
+        /// <summary>
+        /// Will check directories to see if it has subdirectories of:
+        /// Address Data
+        /// Supression Data
+        /// or whether the subdirectory has Cd Images
+        /// </summary>
+        /// <param name="path"></param>
+        private void CheckSubDirectories(string path, string dataset)
+        {
+            String folderName = Path.GetFileName(path);
+            FolderScan fs = new FolderScan();
+            if (fs.ContainsSubFolder(path, "Cd Images"))
+            {
+                // Moving to new path of CD Images
+                path = Path.Combine(path, "CD Images");
 
+                List<string> subDirectory = fs.GetAddressDataSubdirectory(path);
 
+                if (subDirectory.Count > 0)
+                {
+                    foreach (string sub in subDirectory)
+                    {
+                        string tempPath = Path.Combine(path, sub);
+                        Console.WriteLine("Found Path: {0}", tempPath);
+                        string zipDestination = Path.Combine(zipFileLocation, dataset + " " + folderName + " " + sub + ".zip");
+                        Console.WriteLine("Zipped file will be: {0}", zipDestination);
+                        ZipFile(tempPath, zipDestination);
+                    }
+                }
+            }
+
+            if (fs.ContainsSubFolder(path,"Cd Image"))
+            {
+                path = Path.Combine(path, "CD Image");
+                if (fs.CheckHasSetupFile(path))
+                {
+                    Console.WriteLine("Will zip up {0}", path);
+                    string zipDestination = Path.Combine(zipFileLocation, dataset + " " + folderName + ".zip");
+                    Console.WriteLine("Zipped file will be: {0}", zipDestination);
+                    ZipFile(path, zipDestination);
+                }
+            }
+
+            // Should probably have a if statement for if the subdirectory is
+            // address data, supression data,right away
+        }
         /// <summary>
         /// Will zip up the file and encrypt it
         /// </summary>
         /// <param name="destPath">The path to be zipped and </param>
         private void ZipFile(string destPath)
         {
+            String newZip = Path.GetDirectoryName(destPath) + "\\" + Path.GetFileName(destPath) + ".zip";
+            ZipFile(destPath, newZip);
+        }
+
+        /// <summary>
+        /// Will zip up the file to encrypt and zip it
+        /// zipPath will be e.g. C:\test\File.zip
+        /// </summary>
+        /// <param name="destPath">path to be zipped</param>
+        /// <param name="zipPath">path where the zip would be located. </param>
+        private void ZipFile(string destPath, string zipPath)
+        {
             ZipEncryption ze = new ZipEncryption();
             Console.WriteLine("Will zip up {0}", destPath);
 
             String randomGen = ze.EncryptionPasswordGenerator(8);
-            String newZip = Path.GetDirectoryName(destPath) + "\\" + Path.GetFileName(destPath) + ".zip";
+            String newZip = zipPath;
             ze.ZipWithEncryption(destPath, randomGen, newZip);
 
             writeToLog(newZip, randomGen);
-            //Console.WriteLine("Path is {0}", Path.GetDirectoryName(destPath)+"\\"+Path.GetFileName(destPath)+".zip");
-            ///throw new NotImplementedException();
         }
 
         private void writeToLog(string newZip, string randomGen)

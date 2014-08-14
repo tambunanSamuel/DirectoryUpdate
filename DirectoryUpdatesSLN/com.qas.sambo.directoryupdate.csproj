@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>com.qas.sambo.directoryupdate.SampleTest.MockZipFileCreation</StartupObject>
+    <StartupObject>com.qas.sambo.directoryupdate.DirectoryUpdate</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config">
