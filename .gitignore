@@ -11,4 +11,5 @@ Zipped/
 *.v12*
 *.config
 
-
+#add the references folder
+!DirectoryUpdatesSLN/References

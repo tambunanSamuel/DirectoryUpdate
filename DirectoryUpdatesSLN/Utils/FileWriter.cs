@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace com.qas.sambo.directoryupdate.Utils
     {
         private string _userName;
         private string _password;
-        private string fileName = "Details.log";
+        private string fileName;
         
         public void AppendToFile(string details)
         {
@@ -34,6 +35,16 @@ namespace com.qas.sambo.directoryupdate.Utils
         {
            _userName = "PIF0011";
            _password = "Password";
+
+           try
+           {
+               var appSettings = ConfigurationManager.AppSettings;
+               fileName = appSettings["LogFileLocation"] ?? "NotFound.Log";
+           }
+           catch (ConfigurationErrorsException ee)
+           {
+               Console.WriteLine("Error reading app settings");
+           }
         }
 
 
