@@ -58,6 +58,8 @@
     <Compile Include="SampleTest\ZipTestFile.cs" />
     <Compile Include="Utils\FileWriter.cs" />
     <Compile Include="Utils\FolderScan.cs" />
+    <Compile Include="Utils\JSONElementList.cs" />
+    <Compile Include="Utils\JSONUtil.cs" />
     <Compile Include="Utils\ZipEncryption.cs" />
   </ItemGroup>
   <ItemGroup>

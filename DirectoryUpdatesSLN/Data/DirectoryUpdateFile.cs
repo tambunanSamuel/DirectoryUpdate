@@ -185,7 +185,7 @@ namespace com.qas.sambo.directoryupdate.Data
         /// <param name="dir">directory path</param>
         /// <param name="dt">date</param>
         /// <returns></returns>
-        public List<String> ReturnDirectories(string dir, DateTime dt)
+        public List<String> ReturnDirectories_Deprecated(string dir, DateTime dt)
         {
             List<string> AllDir = new List<string>(Directory.EnumerateDirectories(dir));
 
@@ -199,6 +199,22 @@ namespace com.qas.sambo.directoryupdate.Data
                 }
             }
             return NewerDir;
+        }
+
+        /// <summary>
+        /// Will return a list of all directories in dir that is newer than dt
+        /// </summary>
+        /// <param name="dir">directory path</param>
+        /// <param name="dt">date</param>
+        /// <returns></returns>
+        public List<string> ReturnDirectories(string path, DateTime dt)
+        {
+            var dirList = from dir in Directory.EnumerateDirectories(path)
+                          let dirInfo = new DirectoryInfo(dir)
+                          orderby dirInfo.CreationTime ascending
+                          where dirInfo.CreationTime > dt
+                          select dir;
+            return dirList.ToList();
         }
 
 

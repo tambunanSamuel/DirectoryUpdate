@@ -114,7 +114,7 @@ namespace com.qas.sambo.directoryupdate.data
 
         public static void CreateFile()
         {
-            using (System.IO.File.Create(FilePath)) ;
+            using (System.IO.File.Create(FilePath));
 
         }
 

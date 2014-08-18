@@ -102,14 +102,56 @@ Q to quit");
                         break;
 
                     case "g":
-                        Console.WriteLine("Testing Zipping of Path");
-                        Console.WriteLine(Path.Combine(@"C:\MyFiles", "CD IMages"));
-                        Console.WriteLine(Path.Combine(@"C:\MyFiles", "\\CD IMages"));
-                        Console.WriteLine(Path.Combine(@"C:\MyFiles\", "CD IMages"));
-                        Console.WriteLine(Path.Combine(@"C:\MyFiles\\", "\\CD IMages"));
-                        Console.WriteLine(Path.Combine(@"C:\MyFile\", "CD IMages"));
-                        CheckSubDirectories(@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUS\2014 04-April-Q","AUS");
-                        CheckSubDirectories(@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder2\NZL\2014 06-June-Q","NZL");
+                        //Console.WriteLine("Testing Zipping of Path");
+                        //Console.WriteLine(Path.Combine(@"C:\MyFiles", "CD IMages"));
+                        //Console.WriteLine(Path.Combine(@"C:\MyFiles", "\\CD IMages"));
+                        //Console.WriteLine(Path.Combine(@"C:\MyFiles\", "CD IMages"));
+                        //Console.WriteLine(Path.Combine(@"C:\MyFiles\\", "\\CD IMages"));
+                        //Console.WriteLine(Path.Combine(@"C:\MyFile\", "CD IMages"));
+                        //CheckSubDirectories(@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUS\2014 04-April-Q","AUS");
+                        //CheckSubDirectories(@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder2\NZL\2014 06-June-Q","NZL");
+
+                        DirectoryUpdateFile duf = new DirectoryUpdateFile();
+                        List<string> myList = duf.ReturnDirectories(@"\\Product\product\World Data\Usa\v4", new DateTime(2014, 5, 5));
+                        
+                        //var dirs = from file in myList
+                        //           select new DirectoryInfo(file);
+
+
+                        //var dirOrdered = from file in dirs
+                        //                 orderby file.CreationTime ascending
+                        //                 select file;
+
+                        //var dirOrdered = from file in myList
+                        //                 let fileInfo = new DirectoryInfo(file)
+                        //                 orderby fileInfo.CreationTime ascending
+                        //                 select file;
+
+                        //List<DirectoryInfo> newList = new List<DirectoryInfo>();
+                        //foreach (string file in myList)
+                        //{
+                        //    DirectoryInfo di = new DirectoryInfo(file);
+
+                        //}
+
+                        //foreach (var s in myList)
+                        //    Console.WriteLine("Directory is {0} and Date created is {1}", s,Directory.GetCreationTime(s));
+
+                        //foreach (var s in dirOrdered)
+                        //    Console.WriteLine("Directory is {0} and Date is ",s);
+                        //break;
+
+                        CheckDirectory(@"\\Product\product\World Data\Usa\v4", new DateTime(2014, 5, 21));
+                        break;
+                    case "h":
+
+                        JSONUtil<JSONElementList> js = new JSONUtil<JSONElementList>("FilesList.json");
+                        //error because IDictionary is null
+                        Dictionary<string, JSONElementList> testDictionary = new Dictionary<string,JSONElementList>(js.ReadJson());
+                        Console.WriteLine("IS dictionary Empty? {0}", testDictionary == null);
+                        JSONElementList.init();
+                        testDictionary = new Dictionary<string,JSONElementList>(js.ReadJson());
+                        Console.WriteLine("IS dictionary Empty? Now {0}", testDictionary == null);
                         break;
                     default:
 
@@ -121,6 +163,21 @@ Q to quit");
                 Inputs = SplitInput(command);
             }
 
+        }
+
+        private void CheckDirectory(string path, DateTime date)
+        {
+
+            var dirList = from dir in Directory.EnumerateDirectories(path)
+                          let dirInfo = new DirectoryInfo(dir)
+                          orderby dirInfo.CreationTime ascending
+                          where dirInfo.CreationTime > date
+                          select dir;
+
+            foreach (string s in dirList)
+            {
+                Console.WriteLine("Dir {0} was created at {1}", s, Directory.GetCreationTime(s));
+            }
         }
 
         /// <summary>
@@ -312,7 +369,6 @@ Q to quit");
         {
             Console.WriteLine("Updating Data Element so that the lastUpdated will be teh date of the dataset {0}", dateCreated.ToString());
             currD.LastModified = dateCreated;
-            //throw new NotImplementedException();
         }
 
         private void ShowDatasetsList()
