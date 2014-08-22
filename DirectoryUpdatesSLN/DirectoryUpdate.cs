@@ -224,7 +224,7 @@ Q to quit");
 
                 Task<List<string>> task1 = new Task<List<string>>(() => duf.ReturnDirectories(currDe.SourcePath, currDe.LastModified));
                 task1.Start();
-                Console.WriteLine("Reading directories and files");
+                Console.WriteLine("Reading directory: {0}",currDe.SourcePath);
                 while (!task1.IsCompleted)
                 {
                     Console.Write(".");
@@ -233,6 +233,10 @@ Q to quit");
                 task1.Wait();
                 Console.WriteLine();
                 List<string> directoriesList = task1.Result;
+                if (directoriesList.Count == 0)
+                {
+                    Console.WriteLine("Nothing to Update for the {0} dataset\n", currDe.ElementName);
+                }
                 foreach (var s in directoriesList)
                 {
                     foreach (var destPath in currDe.DestinationPath)
@@ -330,6 +334,9 @@ Q to quit");
             // Should probably have a if statement for if the subdirectory is
             // address data, supression data,right away
         }
+
+
+        
         /// <summary>
         /// Will zip up the file and encrypt it
         /// </summary>
@@ -353,8 +360,13 @@ Q to quit");
 
             String randomGen = ze.EncryptionPasswordGenerator(8);
             String newZip = zipPath;
-            ze.ZipWithEncryption(destPath, randomGen, newZip);
-
+            
+            // uncomment this
+            //ze.ZipWithEncryption(destPath, randomGen, newZip);
+            using (StreamWriter sw = new StreamWriter("FileList.log",true))
+            {
+                sw.WriteLine(newZip);
+            }
             writeToLog(newZip, randomGen);
         }
 

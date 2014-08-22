@@ -215,6 +215,7 @@ namespace com.qas.sambo.directoryupdate.Data
                           where dirInfo.CreationTime > dt
                           select dir;
             return dirList.ToList();
+            //return ReturnDirectories_Deprecated(path, dt);
         }
 
 
