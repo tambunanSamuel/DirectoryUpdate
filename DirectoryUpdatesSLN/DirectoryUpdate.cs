@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using com.qas.sambo.directoryupdate.Utils;
 using System.Configuration;
+using System.Windows.Forms;
 
 
 namespace com.qas.sambo.directoryupdate
@@ -17,7 +18,11 @@ namespace com.qas.sambo.directoryupdate
     {
         DirectoryUpdateFile duf;
         Dictionary<string, DataElement> dictionaryList;
-        String zipFileLocation, zipFileLocationKey = "ZipFileLocation";
+        Dictionary<string, JSONElementList> jsonElementList;
+        JSONUtil<JSONElementList> jsonElementListFile;
+        private String zipFileLocation, zipFileLocationKey = "ZipFileLocation";
+        private string elementListAppConfig = "ElementList";
+        private string datasetFile, datasetFileKey = "JsonFileLocation";
 
         public static void Main()
         {
@@ -28,26 +33,51 @@ namespace com.qas.sambo.directoryupdate
             du.checks();
             du.RunProgram();
 
+
         }
 
         private void checks()
         {
             // Put a check to ensure that zipFileLocation is a valid location
+
+            // CreateFilesList();
+        }
+
+        private void CreateFilesList()
+        {
+            JSONUtil<DataElement> deJsonUtil = new JSONUtil<DataElement>(datasetFile);
+            Dictionary<string, DataElement> dictionaryList = new Dictionary<string, DataElement>(deJsonUtil.ReadJson());
+
+            JSONUtil<JSONElementList> jsonElementListJsonUtil = new JSONUtil<JSONElementList>(elementListAppConfig);
+            Dictionary<string, JSONElementList> ftpList = new Dictionary<string, JSONElementList>(jsonElementListJsonUtil.ReadJson());
+
+            foreach (string key in dictionaryList.Keys)
+            {
+                if (!ftpList.ContainsKey(key))
+                {
+                    ftpList.Add(key, new JSONElementList());
+                }
+            }
+            jsonElementListJsonUtil.WriteToJsonFile(ftpList);
         }
 
         private void init()
         {
-
+            string elementListFileLocation;
             try
             {
                 var appSettings = ConfigurationManager.AppSettings;
                 zipFileLocation = appSettings[zipFileLocationKey] ?? @"C:\";
-
+                datasetFile = appSettings[datasetFileKey];
+                elementListFileLocation = appSettings[elementListAppConfig];
+                jsonElementListFile = new JSONUtil<JSONElementList>(elementListFileLocation);
             }
             catch (ConfigurationErrorsException cee)
             {
                 Console.WriteLine("Error reading app setting. Please ensure that ZipFileLocation is set");
             }
+
+
         }
 
 
@@ -77,7 +107,7 @@ Q to quit");
                         Console.WriteLine("Will download");
                         DownloadDatasetsList();
                         Console.WriteLine("Finished Downloading");
-                        StaticDirectoryListings.UpdateFile(dictionaryList);
+                        //StaticDirectoryListings.UpdateFile(dictionaryList);
                         break;
                     case "s":
                         ShowDatasetsList();
@@ -111,9 +141,9 @@ Q to quit");
                         //CheckSubDirectories(@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUS\2014 04-April-Q","AUS");
                         //CheckSubDirectories(@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder2\NZL\2014 06-June-Q","NZL");
 
-                        DirectoryUpdateFile duf = new DirectoryUpdateFile();
-                        List<string> myList = duf.ReturnDirectories(@"\\Product\product\World Data\Usa\v4", new DateTime(2014, 5, 5));
-                        
+                        //DirectoryUpdateFile duf = new DirectoryUpdateFile();
+                        //List<string> myList = duf.ReturnDirectories(@"\\Product\product\World Data\Usa\v4", new DateTime(2014, 5, 5));
+
                         //var dirs = from file in myList
                         //           select new DirectoryInfo(file);
 
@@ -141,17 +171,108 @@ Q to quit");
                         //    Console.WriteLine("Directory is {0} and Date is ",s);
                         //break;
 
-                        CheckDirectory(@"\\Product\product\World Data\Usa\v4", new DateTime(2014, 5, 21));
+                        CheckDirectory(@"\\Product\product\World Data\SGf\v4", new DateTime(2014, 04, 22));
                         break;
                     case "h":
 
                         JSONUtil<JSONElementList> js = new JSONUtil<JSONElementList>("FilesList.json");
                         //error because IDictionary is null
-                        Dictionary<string, JSONElementList> testDictionary = new Dictionary<string,JSONElementList>(js.ReadJson());
-                        Console.WriteLine("IS dictionary Empty? {0}", testDictionary == null);
-                        JSONElementList.init();
-                        testDictionary = new Dictionary<string,JSONElementList>(js.ReadJson());
-                        Console.WriteLine("IS dictionary Empty? Now {0}", testDictionary == null);
+
+                        if (js.ReadJson() != null)
+                        {
+                            jsonElementList = new Dictionary<string, JSONElementList>(js.ReadJson());
+                            Console.WriteLine("Is dictionary Empty? {0}", jsonElementList == null);
+
+                        }
+
+                        jsonElementList = new Dictionary<string, JSONElementList>(js.ReadJson());
+                        Console.WriteLine("Is dictionary Empty? Now {0}", jsonElementList == null);
+                        break;
+
+                    case "r":
+                        SFTPAccess sf = new SFTPAccess();
+                        sf.AddFile("text.txt", "AUS");
+                        long test = 5;
+                        long gg = 4;
+                        Console.WriteLine("{0:##}", (float)(gg / (test)));
+                        break;
+
+                    case "j":
+                        Console.WriteLine("Testing WinForms");
+                        //MessageBox.Show("Test");
+                        Console.WriteLine("Before Output");
+                        for (int i = 0; i < 10; i++)
+                        {
+                            int currentLine = Console.CursorTop;
+                            Console.WriteLine("i is {0:0.00}", (float)i/10);
+                            Thread.Sleep(500);
+                            Console.SetCursorPosition(0, currentLine);
+                        }
+                        Console.WriteLine();
+                        int statusLine = -1;
+                        for (int i = 0; i < 10; i++)
+                        {
+                            if (i % 2 == 0)
+                            {
+                                Console.WriteLine("Other lines in here " + i);
+                            }
+
+
+                            Thread.Sleep(500);
+                            //update the status line here
+                            SetTextForLine("Status " + i + " Copied", ref statusLine);
+                        }
+                        Console.WriteLine();
+                        Console.WriteLine("AFter Output");
+                        break;
+                    case "o":
+                        Console.WriteLine("Testing Can CheckDirectory");
+                        //CheckSubDirectories(@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\CAN\2014 08-August-M", "CAN");
+                        UploadSFTP us = new UploadSFTP();
+                        List<string> myList = new List<string>();
+                        using (StreamReader sr = new StreamReader("FileList.log"))
+                        {
+                            while (sr.Peek() > -1)
+                            {
+                                string line = sr.ReadLine();
+                                Console.WriteLine("Line is {0} \n Dataset is {1}", line, us.GetDatasetName(line));
+                                myList.Add(line);
+         
+                            }
+                        }
+                        Console.WriteLine("hoihoi");
+                        var s = myList.AsEnumerable()
+                            .Select(p=>p)
+                            .Distinct();
+
+                        SFTPAccess sa = new SFTPAccess();
+                        foreach (var ff in s)
+                        {
+                            Console.WriteLine("Uploading {0} into subFolder {1}", ff, us.GetDatasetName(ff));
+                        
+                              //  sa.AddFile(ff, us.GetDatasetName(ff));
+                    
+                        }
+
+                        sa.AddFile(@"C:\MyFiles\Programming\Testing\Zipped\AUE February 2014.zip", "AUE");
+                        sa.AddFile("LogFile.log","AUE");
+        
+                        break;
+                    case "p":
+                        Console.WriteLine("Testing Copy Directory");
+                        try
+                        {
+                            new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(@"C:\MyFiles\Programming\Testing\Zipped\AUS PAF 2014.4", @"C:\MyFiles\Programming\Testing\Zipped\AUS PAF 2014.45", true);
+                        }
+                        catch (System.InvalidOperationException e)
+                        {
+                            Console.WriteLine("Cannot write file. Please check source and destination path:\n\n {0}", e.ToString());
+                        }
+                        catch (System.IO.DirectoryNotFoundException e)
+                        {
+                            Console.WriteLine("The source/destination directory has not been found", e.ToString());
+                        }
+
                         break;
                     default:
 
@@ -163,6 +284,24 @@ Q to quit");
                 Inputs = SplitInput(command);
             }
 
+        }
+        private void SetTextForLine(string text, ref int line)
+        {
+            //set the status line for future reference
+            if (line < 0)
+            {
+                line = Console.CursorTop;
+            }
+
+            //save line/cursor state
+            int currentLine = Console.CursorTop;
+            bool cursorVisible = Console.CursorVisible;
+            Console.SetCursorPosition(0, line);
+            Console.WriteLine(text);
+
+            //restore state
+            Console.CursorTop = (currentLine == line ? currentLine + 1 : currentLine);
+            Console.CursorVisible = cursorVisible;
         }
 
         private void CheckDirectory(string path, DateTime date)
@@ -224,7 +363,7 @@ Q to quit");
 
                 Task<List<string>> task1 = new Task<List<string>>(() => duf.ReturnDirectories(currDe.SourcePath, currDe.LastModified));
                 task1.Start();
-                Console.WriteLine("Reading directory: {0}",currDe.SourcePath);
+                Console.WriteLine("Reading directory: {0}", currDe.SourcePath);
                 while (!task1.IsCompleted)
                 {
                     Console.Write(".");
@@ -239,6 +378,7 @@ Q to quit");
                 }
                 foreach (var s in directoriesList)
                 {
+                    bool first = true;
                     foreach (var destPath in currDe.DestinationPath)
                     {
                         var newDestPath = destPath + "\\" + Path.GetFileName(s);
@@ -251,41 +391,52 @@ Q to quit");
                         OriginalDestSize.Start();
                         OriginalDestSize.Wait();
                         long OrgSize = OriginalDestSize.Result;
+
+
                         // Copying the directory
                         Task task2 = new Task(() => duf.CopyDirectories(s, newDestPath));
                         task2.Start();
 
-                        //Task<long> newDestSize = new Task<long>(() => DirectorySize(newDestPath));
-                        //newDestSize.Start();
 
+                        //Updating of the percentage
                         while (!task2.IsCompleted)
                         {
-                            Console.Write("Original Destination Size is {0}", OrgSize);
-                            //Task<long> NewDirectorySize = new Task<long>(() => DirectorySize(newDestPath));
-                            //NewDirectorySize.Start();
-                            //NewDirectorySize.Wait();
-
-                            //long test = NewDirectorySize.Result;
-                            //NewDirectorySize.Dispose();
+                            //Console.Write("Original Destination Size is {0}", OrgSize);
                             long test = DirectorySize(newDestPath);
-                            Console.WriteLine("New Size is {0}", test);
-                            Console.WriteLine("It is {0:##}% Complete", (float)test / OrgSize);
+                            //Console.WriteLine("New Size is {0}", test);
+                            // Console.WriteLine("It is {0.##}% Complete", (float)test / OrgSize);
                             Thread.Sleep(5000);
                         }
 
                         task2.Wait();
                         Console.WriteLine();
-                        UpdateDataElement(currDe, Directory.GetCreationTime(s));
-                        //ZipFile(newDestPath);
-                        CheckSubDirectories(newDestPath, dataset);
+
+
+                        if (first)
+                        {
+                            UpdateDataElement(currDe, Directory.GetCreationTime(s));
+                            StaticDirectoryListings.UpdateFile(dictionaryList);
+                            CheckSubDirectories(newDestPath, dataset);
+                          
+                        }
+
+
+                        first = false; // This is to ensure that the zip will be updated once only
                     }
 
-                    // 1) Download the dataset to the correct path 
 
                 }
 
 
             }
+        }
+
+        private void UpdateToFTP(string zipFile)
+        {
+            Console.WriteLine("Writing to FTP ZipFIle");
+            SFTPAccess sa = new SFTPAccess();
+            UploadSFTP us = new UploadSFTP();
+            string dataset = us.GetDatasetName(zipFile);
         }
 
         /// <summary>
@@ -294,13 +445,18 @@ Q to quit");
         /// Supression Data
         /// or whether the subdirectory has Cd Images
         /// </summary>
-        /// <param name="path"></param>
-        private void CheckSubDirectories(string path, string dataset)
+        /// <param name="path">Path used</param>
+        /// <param name="dataset">Dataset being used</param>
+        private void CheckSubDirectories(string originalPath, string dataset)
         {
-            String folderName = Path.GetFileName(path);
+
+            String folderName = Path.GetFileName(originalPath);
             FolderScan fs = new FolderScan();
-            if (fs.ContainsSubFolder(path, "Cd Images"))
+            FileStringFormatting fsf = new FileStringFormatting();
+            Console.WriteLine("CSD: Zipping up {0} which is of Dataset: {1}", originalPath, dataset);
+            if (fs.ContainsSubFolder(originalPath, "Cd Images"))
             {
+                string path = originalPath;
                 // Moving to new path of CD Images
                 path = Path.Combine(path, "CD Images");
 
@@ -311,32 +467,44 @@ Q to quit");
                     foreach (string sub in subDirectory)
                     {
                         string tempPath = Path.Combine(path, sub);
-                        Console.WriteLine("Found Path: {0}", tempPath);
+                        //string zipDestinationString = Path.Combine(zipFileLocation, dataset + " " + folderName + " " + sub + ".zip");
                         string zipDestination = Path.Combine(zipFileLocation, dataset + " " + folderName + " " + sub + ".zip");
-                        Console.WriteLine("Zipped file will be: {0}", zipDestination);
                         ZipFile(tempPath, zipDestination);
+
                     }
                 }
             }
 
-            if (fs.ContainsSubFolder(path,"Cd Image"))
+            if (fs.ContainsSubFolder(originalPath, "Cd Image"))
             {
+                string path = originalPath;
                 path = Path.Combine(path, "CD Image");
                 if (fs.CheckHasSetupFile(path))
                 {
-                    Console.WriteLine("Will zip up {0}", path);
                     string zipDestination = Path.Combine(zipFileLocation, dataset + " " + folderName + ".zip");
-                    Console.WriteLine("Zipped file will be: {0}", zipDestination);
                     ZipFile(path, zipDestination);
                 }
             }
+            
+            if (fs.ContainsSubFolder(originalPath, "SERP"))
+            {
+                string path = originalPath;
+                path = Path.Combine(path, "SERP");
+                if (fs.CheckHasSetupFile(path))
+                {
+                    
+                    string zipDestination = Path.Combine(zipFileLocation, dataset + " " + folderName + ".zip");
+                    ZipFile(path, zipDestination);
+                }
+            }
+
 
             // Should probably have a if statement for if the subdirectory is
             // address data, supression data,right away
         }
 
 
-        
+
         /// <summary>
         /// Will zip up the file and encrypt it
         /// </summary>
@@ -355,19 +523,53 @@ Q to quit");
         /// <param name="zipPath">path where the zip would be located. </param>
         private void ZipFile(string destPath, string zipPath)
         {
+            Console.WriteLine("\nZipFile:\nZipPath is {0}", zipPath);
+            Console.WriteLine("Destpath is {0}", destPath);
             ZipEncryption ze = new ZipEncryption();
-            Console.WriteLine("Will zip up {0}", destPath);
-
+            FileStringFormatting fsf = new FileStringFormatting();
             String randomGen = ze.EncryptionPasswordGenerator(8);
             String newZip = zipPath;
-            
+            string fileName = Path.GetFileNameWithoutExtension(zipPath);
+            List<string> splits = fsf.ReturnStringSplit(fileName);
+            string dirPath = Path.GetDirectoryName(zipPath);
+
+            string year = splits.ElementAt(1);
+            string dataSet = splits.ElementAt(0);
+            string month = fsf.GetMonth(splits.ElementAt(2));
+            string extraElement = fsf.ReturnExtraElements(splits);
+            string finalFileName = (dataSet + " " + month + " " + year + " " + extraElement).Trim();
+
+            string addInformation = CheckSerp(destPath);
+            if (addInformation!="")
+            {
+                finalFileName = finalFileName + " " + addInformation;
+            }
+
+            newZip = Path.Combine(dirPath, finalFileName + ".zip");
+
             // uncomment this
-            //ze.ZipWithEncryption(destPath, randomGen, newZip);
-            using (StreamWriter sw = new StreamWriter("FileList.log",true))
+            ze.ZipWithEncryption(destPath, randomGen, newZip);
+
+            Console.WriteLine("newZip is {0}", newZip);
+
+            using (StreamWriter sw = new StreamWriter("FileList.log", true))
             {
                 sw.WriteLine(newZip);
             }
             writeToLog(newZip, randomGen);
+
+            //Updating to FTP
+            UpdateToFTP(newZip);
+        }
+
+
+        private string CheckSerp(string destPath)
+        {
+            if (Path.GetFileName(destPath).Equals("SERP"))
+                return "SERP";
+            else
+                return "";
+
         }
 
         private void writeToLog(string newZip, string randomGen)

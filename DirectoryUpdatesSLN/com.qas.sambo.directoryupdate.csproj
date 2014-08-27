@@ -56,10 +56,13 @@
     <Compile Include="SampleTest\StopJoin.cs" />
     <Compile Include="SampleTest\ThreadsExample.cs" />
     <Compile Include="SampleTest\ZipTestFile.cs" />
+    <Compile Include="Utils\FileStringFormatting.cs" />
     <Compile Include="Utils\FileWriter.cs" />
     <Compile Include="Utils\FolderScan.cs" />
     <Compile Include="Utils\JSONElementList.cs" />
     <Compile Include="Utils\JSONUtil.cs" />
+    <Compile Include="Utils\SFTPAccess.cs" />
+    <Compile Include="Utils\UploadSFTP.cs" />
     <Compile Include="Utils\ZipEncryption.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,11 +73,13 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Renci.SshNet">
-      <HintPath>References\Renci.SshNet.dll</HintPath>
+    <Reference Include="Renci.SshNet, Version=2014.4.6.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SSH.NET.2014.4.6-beta1\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ThingsToDo.txt" />

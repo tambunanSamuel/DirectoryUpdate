@@ -12,7 +12,7 @@ namespace com.qas.sambo.directoryupdate.Utils
         private Random random;
         // number of characters so the last few digits aren't added
         private readonly String CharacterAlphabet = "abcdefghijklmnopqrstuvwxyz";
-        private readonly String CharactersNonAlphabet = "!@#$%&^*()";
+        private readonly String CharactersNonAlphabet = "!@#$%&^*";
         private readonly String CharacterList;
         
         public ZipEncryption()

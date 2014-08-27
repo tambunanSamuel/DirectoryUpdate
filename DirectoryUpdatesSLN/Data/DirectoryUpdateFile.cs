@@ -114,8 +114,6 @@ namespace com.qas.sambo.directoryupdate.Data
             // Using Visual Basic 
             try
             {
-                Console.WriteLine("Copying: {0}", SourceDir);
-
                 new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir, NewPath, true);
             }
             catch (System.InvalidOperationException e)

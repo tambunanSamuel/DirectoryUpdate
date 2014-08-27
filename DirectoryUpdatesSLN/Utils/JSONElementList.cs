@@ -19,8 +19,8 @@ namespace com.qas.sambo.directoryupdate.Utils
 
         public JSONElementList()
         {
-            FTPUser = "PIF001";
-            FTPPass = "Pass";
+            FTPUser = "PIF0011";
+            FTPPass = "Q$sDown2oad";
             FTPLink = "ftpLink";
             FileName = "filename";
             FilePass = "Password";

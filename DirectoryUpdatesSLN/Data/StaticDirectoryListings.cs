@@ -151,10 +151,19 @@ namespace com.qas.sambo.directoryupdate.data
         /// <returns></returns>
         public static Dictionary<string, DataElement> ReadJson()
         {
-            DataElement test = JsonConvert.DeserializeObject<DataElement>(System.IO.File.ReadAllText(FilePath));
-            string fileRead = System.IO.File.ReadAllText(FilePath);
-            Dictionary<string,DataElement> myDeList = JsonConvert.DeserializeObject<Dictionary<string,DataElement>>(fileRead);
-            return myDeList;
+            try
+            {
+                DataElement test = JsonConvert.DeserializeObject<DataElement>(System.IO.File.ReadAllText(FilePath));
+                string fileRead = System.IO.File.ReadAllText(FilePath);
+                Dictionary<string, DataElement> myDeList = JsonConvert.DeserializeObject<Dictionary<string, DataElement>>(fileRead);
+                return myDeList;
+            }
+            catch(System.IO.IOException ioe)
+            {
+                Console.WriteLine("Check that {0} is in the same directory", FilePath);
+                throw;
+            }
+            
         }
 
     }

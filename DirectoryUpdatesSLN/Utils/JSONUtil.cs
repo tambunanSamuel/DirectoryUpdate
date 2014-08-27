@@ -41,5 +41,21 @@ namespace com.qas.sambo.directoryupdate.Utils
             return myDeList;
         }
 
+        public void UpdateElement(string elementName, T element)
+        {
+            Dictionary<string, T> list = new Dictionary<string, T>(ReadJson());
+            list.Remove(elementName);
+            list.Add(elementName, element);
+        }
+
+        public T GetElement(string elementName)
+        {
+            Dictionary<string, T> list = new Dictionary<string, T>(ReadJson());
+            T returnValue;
+            if (list.TryGetValue(elementName, out returnValue))
+                return returnValue;
+            else
+                throw new Exception("Failed to get element name");
+        }
     }
 }

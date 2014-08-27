@@ -34,6 +34,7 @@ namespace com.qas.sambo.directoryupdate.Utils
             DirectoryList.Add("Dataplus");
             DirectoryList.Add("Suppression Data");
             DirectoryList.Add("NON CASS");
+            DirectoryList.Add("SERP");
 
             ImagesList = new List<string>();
             ImagesList.Add("CD Images");
