@@ -207,14 +207,15 @@ namespace com.qas.sambo.directoryupdate.Data
         /// <returns></returns>
         public List<string> ReturnDirectories(string path, DateTime dt)
         {
-            List<string> newList = new List<string>();
-            foreach (var dirToCheck in Directory.EnumerateDirectories(path))
-            {
+            return ReturnDirectories_Depecrated_2(path, dt);
+            //List<string> newList = new List<string>();
+            //foreach (var dirToCheck in Directory.EnumerateDirectories(path))
+            //{
 
-                if (CheckRecursiveSubDirectory(dirToCheck, dt))
-                    newList.Add(dirToCheck);
-            }
-            return newList;
+            //    if (CheckRecursiveSubDirectory(dirToCheck, dt))
+            //        newList.Add(dirToCheck);
+            //}
+            //return newList;
         }
 
         public List<string> ReturnDirectories_Depecrated_2(string path, DateTime dt)
@@ -228,6 +229,33 @@ namespace com.qas.sambo.directoryupdate.Data
             //return ReturnDirectories_Deprecated(path, dt);
         }
 
+        public List<ParentDirectoryInfo> ReturnTest(string path, DateTime dt)
+        {
+            List<ParentDirectoryInfo> ret = new List<ParentDirectoryInfo>();
+            foreach (var dirToCheck in Directory.EnumerateDirectories(path))
+            {
+                checkNewRec(ret, dirToCheck, dt,dirToCheck);             
+            }
+            return ret;
+        }
+
+        private void checkNewRec(List<ParentDirectoryInfo> li, string path, DateTime dt, string originalPath)
+        {
+            DirectoryInfo di = new DirectoryInfo(path);
+            bool ret = false;
+            if (di.CreationTime > dt)
+            {
+                li.Add(new ParentDirectoryInfo(originalPath, di.CreationTime));
+            }
+
+
+            foreach (var f in Directory.EnumerateDirectories(path))
+                checkNewRec(li, f, dt, originalPath);
+
+            
+        }
+
+        
     
         public bool CheckRecursiveSubDirectory(string path, DateTime dt)
         {
@@ -288,5 +316,11 @@ namespace com.qas.sambo.directoryupdate.Data
     {
         public string ParentDirPath;
         public DateTime NewestDT;
+
+       public ParentDirectoryInfo(string ParentDirPath, DateTime newestDT)
+        {
+            this.ParentDirPath = ParentDirPath;
+            this.NewestDT = newestDT;
+        }
     }
 }

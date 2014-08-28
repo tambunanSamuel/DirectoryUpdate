@@ -286,10 +286,17 @@ Q to quit");
                         Console.WriteLine("Testing ReturnDirectories2");
                         DirectoryUpdateFile duf = new DirectoryUpdateFile();
                         string st = "\\\\Aux1fsv02\\ndrive\\QAS\\product\\WorldData\\AUS";
-                        
-                        var x = duf.ReturnDirectories(st, new DateTime(2014,8,28));
-                        foreach (string f in x)
-                            Console.WriteLine(f);
+
+                        var x = duf.ReturnTest(st, new DateTime(2014, 8, 28));
+                        foreach (var f in x)
+                            Console.WriteLine("path is {0} and time is {1}", f.ParentDirPath,f.NewestDT);
+
+                        var latestDate = from f in x
+                                         group f by f.ParentDirPath into g
+                                         select g.OrderByDescending(t=>t.NewestDT).FirstOrDefault();
+                        Console.WriteLine("ordered");
+                        foreach (var f in latestDate)
+                            Console.WriteLine("path is {0} and time is {1}", f.ParentDirPath, f.NewestDT);
 
                         Console.WriteLine("Using checkrecursive");
                         break;
