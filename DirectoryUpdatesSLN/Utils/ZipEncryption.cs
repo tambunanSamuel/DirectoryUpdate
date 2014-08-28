@@ -1,6 +1,7 @@
 ﻿using Ionic.Zip;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +63,8 @@ namespace com.qas.sambo.directoryupdate.Utils
         /// <param name="zipPath">Output Path (Has to be .zip format. e.g. Output.zip</param>
         public void ZipWithEncryption(string pathToZip, string password, string zipPath)
         {
+            
+            Console.WriteLine("zipath is{0}", zipPath);
             using (ZipFile zip = new ZipFile())
             {
                 zip.Encryption = EncryptionAlgorithm.WinZipAes256;

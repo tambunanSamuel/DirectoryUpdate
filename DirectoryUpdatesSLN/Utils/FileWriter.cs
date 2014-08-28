@@ -21,7 +21,7 @@ namespace com.qas.sambo.directoryupdate.Utils
         public string CreateDetails(string zipName, string password)
         {
             string ret;
-            ret =  "==============";
+            ret =  "\n==============";
             ret += "\nUserName: " + UserName;
             ret += "\nPassword: " + Password;
        

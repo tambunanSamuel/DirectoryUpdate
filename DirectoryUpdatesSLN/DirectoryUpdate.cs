@@ -10,6 +10,7 @@ using System.Threading;
 using com.qas.sambo.directoryupdate.Utils;
 using System.Configuration;
 using System.Windows.Forms;
+using Microsoft.VisualBasic.FileIO;
 
 
 namespace com.qas.sambo.directoryupdate
@@ -260,19 +261,37 @@ Q to quit");
                         break;
                     case "p":
                         Console.WriteLine("Testing Copy Directory");
-                        try
+                        //try
+                        //{
+                        //    new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(@"C:\MyFiles\Programming\Testing\Zipped\AUS PAF 2014.4", @"C:\MyFiles\Programming\Testing\Zipped\AUS PAF 2014.45", UIOption.AllDialogs);
+                        //}
+                        //catch (System.InvalidOperationException e)
+                        //{
+                        //    Console.WriteLine("Cannot write file. Please check source and destination path:\n\n {0}", e.ToString());
+                        //}
+                        //catch (System.IO.DirectoryNotFoundException e)
+                        //{
+                        //    Console.WriteLine("The source/destination directory has not been found", e.ToString());
+                        //}
+                        FileInfo fi = new FileInfo(@"C:\MyFiles\Programming\Testing\Zipped\AUS July 2014 Dataplus.zip");
+                        Console.WriteLine("Does exist {0}", fi.Exists);
+                        if (fi.Exists)
                         {
-                            new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(@"C:\MyFiles\Programming\Testing\Zipped\AUS PAF 2014.4", @"C:\MyFiles\Programming\Testing\Zipped\AUS PAF 2014.45", true);
+                            Console.WriteLine(Path.Combine(Path.GetDirectoryName(fi.FullName),Path.GetFileNameWithoutExtension(fi.FullName)+"_"+"1"+".zip"));
                         }
-                        catch (System.InvalidOperationException e)
-                        {
-                            Console.WriteLine("Cannot write file. Please check source and destination path:\n\n {0}", e.ToString());
-                        }
-                        catch (System.IO.DirectoryNotFoundException e)
-                        {
-                            Console.WriteLine("The source/destination directory has not been found", e.ToString());
-                        }
+                        fi = new FileInfo(@"C:\MyFiles\Programming\Testing\Zipped\AUS July 2014 Dataplus.zip31");
+                        Console.WriteLine("Does exist {0}", fi.Exists);
+                        break;
+                    case "y":
+                        Console.WriteLine("Testing ReturnDirectories2");
+                        DirectoryUpdateFile duf = new DirectoryUpdateFile();
+                        string st = "\\\\Aux1fsv02\\ndrive\\QAS\\product\\WorldData\\AUS";
+                        
+                        var x = duf.ReturnDirectories(st, new DateTime(2014,8,28));
+                        foreach (string f in x)
+                            Console.WriteLine(f);
 
+                        Console.WriteLine("Using checkrecursive");
                         break;
                     default:
 
@@ -398,16 +417,15 @@ Q to quit");
                         task2.Start();
 
 
-                        //Updating of the percentage
-                        while (!task2.IsCompleted)
-                        {
-                            //Console.Write("Original Destination Size is {0}", OrgSize);
-                            long test = DirectorySize(newDestPath);
-                            //Console.WriteLine("New Size is {0}", test);
-                            // Console.WriteLine("It is {0.##}% Complete", (float)test / OrgSize);
-                            Thread.Sleep(5000);
-                        }
-
+                        ////Updating of the percentage
+                        //while (!task2.IsCompleted)
+                        //{
+                        //    //Console.Write("Original Destination Size is {0}", OrgSize);
+                        //    long test = DirectorySize(newDestPath);
+                        //    //Console.WriteLine("New Size is {0}", test);
+                        //    // Console.WriteLine("It is {0.##}% Complete", (float)test / OrgSize);
+                        //    Thread.Sleep(5000);
+                        //}
                         task2.Wait();
                         Console.WriteLine();
 
@@ -417,6 +435,7 @@ Q to quit");
                             UpdateDataElement(currDe, Directory.GetCreationTime(s));
                             StaticDirectoryListings.UpdateFile(dictionaryList);
                             CheckSubDirectories(newDestPath, dataset);
+                            
                           
                         }
 
@@ -437,6 +456,7 @@ Q to quit");
             SFTPAccess sa = new SFTPAccess();
             UploadSFTP us = new UploadSFTP();
             string dataset = us.GetDatasetName(zipFile);
+            sa.AddFile(zipFile, dataset);
         }
 
         /// <summary>
@@ -547,6 +567,14 @@ Q to quit");
 
             newZip = Path.Combine(dirPath, finalFileName + ".zip");
 
+            FileInfo fi = new FileInfo(newZip);
+
+            for (int i = 1; fi.Exists; i++)
+            {
+                newZip = Path.Combine(Path.GetDirectoryName(fi.FullName), Path.GetFileNameWithoutExtension(fi.FullName) + "_" + i + ".zip");
+                fi = new FileInfo(newZip);
+            }
+
             // uncomment this
             ze.ZipWithEncryption(destPath, randomGen, newZip);
 
@@ -581,7 +609,7 @@ Q to quit");
 
         private void UpdateDataElement(DataElement currD, DateTime dateCreated)
         {
-            Console.WriteLine("Updating Data Element so that the lastUpdated will be teh date of the dataset {0}", dateCreated.ToString());
+            //Console.WriteLine("Updating Data Element so that the lastUpdated will be teh date of the dataset {0}", dateCreated.ToString());
             currD.LastModified = dateCreated;
         }
 

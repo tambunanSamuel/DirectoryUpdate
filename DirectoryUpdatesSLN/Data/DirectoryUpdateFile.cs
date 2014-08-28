@@ -114,7 +114,7 @@ namespace com.qas.sambo.directoryupdate.Data
             // Using Visual Basic 
             try
             {
-                new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir, NewPath, true);
+                new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir, NewPath,UIOption.AllDialogs);
             }
             catch (System.InvalidOperationException e)
             {
@@ -207,6 +207,18 @@ namespace com.qas.sambo.directoryupdate.Data
         /// <returns></returns>
         public List<string> ReturnDirectories(string path, DateTime dt)
         {
+            List<string> newList = new List<string>();
+            foreach (var dirToCheck in Directory.EnumerateDirectories(path))
+            {
+
+                if (CheckRecursiveSubDirectory(dirToCheck, dt))
+                    newList.Add(dirToCheck);
+            }
+            return newList;
+        }
+
+        public List<string> ReturnDirectories_Depecrated_2(string path, DateTime dt)
+        {
             var dirList = from dir in Directory.EnumerateDirectories(path)
                           let dirInfo = new DirectoryInfo(dir)
                           orderby dirInfo.CreationTime ascending
@@ -214,6 +226,38 @@ namespace com.qas.sambo.directoryupdate.Data
                           select dir;
             return dirList.ToList();
             //return ReturnDirectories_Deprecated(path, dt);
+        }
+
+    
+        public bool CheckRecursiveSubDirectory(string path, DateTime dt)
+        {
+            DirectoryInfo di = new DirectoryInfo(path);
+            bool ret = false;
+            if (di.CreationTime > dt)
+            {
+                return true;
+            }
+                
+
+            foreach (var f in Directory.EnumerateDirectories(path))
+                ret = ret || CheckRecursiveSubDirectory(f, dt);
+
+            return ret;
+
+        }
+
+        public List<string> ReturnDirectories2(string path)
+        {
+            List<string> retList = new List<string>();
+            Console.WriteLine("hoi");
+            retList.Add(path);
+            var directoryList = Directory.EnumerateDirectories(path);
+
+            foreach( var f in directoryList)
+            {
+                retList.AddRange(ReturnDirectories2(f));
+            }
+            return retList;
         }
 
 
@@ -238,5 +282,11 @@ namespace com.qas.sambo.directoryupdate.Data
         }
 
 
+    }
+
+    public class ParentDirectoryInfo
+    {
+        public string ParentDirPath;
+        public DateTime NewestDT;
     }
 }

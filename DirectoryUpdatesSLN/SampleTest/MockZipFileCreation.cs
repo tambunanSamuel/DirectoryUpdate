@@ -87,8 +87,13 @@ namespace com.qas.sambo.directoryupdate.SampleTest
         private static void writeToLog(string newZip, string randomGen)
         {
             FileWriter fw = new FileWriter();
-            fw.AppendToFile("Created at" + DateTime.Now.ToShortDateString());
+            fw.AppendToFile("Created at: " + DateTime.Now.ToShortDateString());
             fw.AppendToFile(fw.CreateDetails(newZip, randomGen));
+        }
+
+        private static void writeToLog(string newZip, string randomGen, string ftpFile)
+        {
+
         }
     }
 }
