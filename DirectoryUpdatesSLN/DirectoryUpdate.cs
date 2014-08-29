@@ -300,6 +300,17 @@ Q to quit");
 
                         Console.WriteLine("Using checkrecursive");
                         break;
+                    case "w":
+                        Console.WriteLine("Testing copy files");
+                        DirectoryCopy dc = new DirectoryCopy();
+                         //dc.FileCopy(@"C:\MyFiles\Programming\Testing\SGf July 2014.zip", @"C:\MyFiles\Programming\Testing\SGf July 2014.zip2");
+                        var async = dc.CreateRandomFile(@"C:\MyFiles\Programming\Testing\SGf July 2014f.txt", 1001) as MyAsyncResult;
+                        while (true)
+                        {
+                            Console.WriteLine(async.statusNumber);
+                            Thread.Sleep(50);
+                        }
+                        break;
                     default:
 
                         break;
