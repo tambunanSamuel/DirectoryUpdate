@@ -111,10 +111,11 @@ namespace com.qas.sambo.directoryupdate.Data
         /// <param name="NewPath"></param>
         public void CopyDirectories(string SourceDir, string NewPath)
         {
+            Console.WriteLine("Moving from {0} to {1}",SourceDir,NewPath);
             // Using Visual Basic 
             try
             {
-                new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir, NewPath,UIOption.AllDialogs);
+                new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir, NewPath,true);
             }
             catch (System.InvalidOperationException e)
             {
@@ -236,7 +237,11 @@ namespace com.qas.sambo.directoryupdate.Data
             {
                 checkNewRec(ret, dirToCheck, dt,dirToCheck);             
             }
-            return ret;
+
+            var latestDate = from f in ret
+                             group f by f.ParentDirPath into g
+                             select g.OrderByDescending(t => t.NewestDT).FirstOrDefault();
+            return latestDate.ToList();
         }
 
         private void checkNewRec(List<ParentDirectoryInfo> li, string path, DateTime dt, string originalPath)

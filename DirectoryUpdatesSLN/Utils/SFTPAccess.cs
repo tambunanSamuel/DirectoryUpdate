@@ -36,7 +36,7 @@ namespace com.qas.sambo.directoryupdate.Utils
         /// <param name="dataSetName">Dataset Used</param>
         public void AddFile(string localFilePath, string dataSetName)
         {
-            Console.WriteLine("Uploading: {0}", localFilePath);
+            Console.WriteLine("Uploading: {0}\n To Dataset {1}\n", localFilePath, dataSetName);
             string fileName = Path.GetFileName(localFilePath);
             try
             {
@@ -62,6 +62,7 @@ namespace com.qas.sambo.directoryupdate.Utils
                         }
                        
                     }
+                    Console.WriteLine();
                     sftpInstance.Disconnect();
                 }
             }

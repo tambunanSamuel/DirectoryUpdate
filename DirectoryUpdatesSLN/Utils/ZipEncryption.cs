@@ -64,7 +64,6 @@ namespace com.qas.sambo.directoryupdate.Utils
         public void ZipWithEncryption(string pathToZip, string password, string zipPath)
         {
             
-            Console.WriteLine("zipath is{0}", zipPath);
             using (ZipFile zip = new ZipFile())
             {
                 zip.Encryption = EncryptionAlgorithm.WinZipAes256;

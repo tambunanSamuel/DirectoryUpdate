@@ -387,7 +387,8 @@ Q to quit");
                 DataElement currDe = dicList.Value;
                 string dataset = currDe.ElementName;
 
-                Task<List<string>> task1 = new Task<List<string>>(() => duf.ReturnDirectories(currDe.SourcePath, currDe.LastModified));
+                //Task<List<string>> task1 = new Task<List<string>>(() => duf.ReturnDirectories(currDe.SourcePath, currDe.LastModified));
+                Task<List<ParentDirectoryInfo>> task1 = new Task<List<ParentDirectoryInfo>>(() => duf.ReturnTest(currDe.SourcePath, currDe.LastModified));
                 task1.Start();
                 Console.WriteLine("Reading directory: {0}", currDe.SourcePath);
                 while (!task1.IsCompleted)
@@ -396,19 +397,25 @@ Q to quit");
                     Thread.Sleep(2000);
                 }
                 task1.Wait();
+                
                 Console.WriteLine();
-                List<string> directoriesList = task1.Result;
+                List<ParentDirectoryInfo> directoriesList = task1.Result;
+                foreach(var f in directoriesList)
+                {
+                    Console.WriteLine("List of DIrectories: {0}", f.ParentDirPath);
+                }
                 if (directoriesList.Count == 0)
                 {
                     Console.WriteLine("Nothing to Update for the {0} dataset\n", currDe.ElementName);
                 }
-                foreach (var s in directoriesList)
+                foreach (var fg in directoriesList)
                 {
                     bool first = true;
+                    var s = fg.ParentDirPath;
                     foreach (var destPath in currDe.DestinationPath)
                     {
                         var newDestPath = destPath + "\\" + Path.GetFileName(s);
-                        Console.WriteLine("NewDestPath is {0}", newDestPath);
+                        //Console.WriteLine("NewDestPath is {0}", newDestPath);
 
                         Console.WriteLine("Copying {0} into {1}", s, newDestPath);
 
@@ -439,7 +446,8 @@ Q to quit");
 
                         if (first)
                         {
-                            UpdateDataElement(currDe, Directory.GetCreationTime(s));
+                            //UpdateDataElement(currDe, Directory.GetCreationTime(s));
+                            UpdateDataElement(currDe, fg.NewestDT);
                             StaticDirectoryListings.UpdateFile(dictionaryList);
                             CheckSubDirectories(newDestPath, dataset);
                             
