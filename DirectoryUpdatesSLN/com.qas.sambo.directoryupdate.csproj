@@ -57,6 +57,7 @@
     <Compile Include="SampleTest\ThreadsExample.cs" />
     <Compile Include="SampleTest\ZipTestFile.cs" />
     <Compile Include="Utils\DirectoryCopy.cs" />
+    <Compile Include="Utils\FileRoutines.cs" />
     <Compile Include="Utils\FileStringFormatting.cs" />
     <Compile Include="Utils\FileWriter.cs" />
     <Compile Include="Utils\FolderScan.cs" />

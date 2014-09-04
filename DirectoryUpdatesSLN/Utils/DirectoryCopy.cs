@@ -28,29 +28,31 @@ namespace com.qas.sambo.directoryupdate.Utils
 
         public IAsyncResult CreateRandomFile(string destPath, int bytesUsed)
         {
-            MyAsyncResult ias = new MyAsyncResult();
+       
             byte[] dataArray = new byte[bytesUsed];
             new Random().NextBytes(dataArray);
 
-            Task t = new Task(() =>
-            {
+          
                 using (FileStream destStream = new FileStream(destPath, FileMode.Create))
                 {
                     for (int i = 0; i < dataArray.Length; i++)
                     {
                         destStream.WriteByte(dataArray[i]);
-           
+
+                        //IAsyncResult++;
                     }
                 }
-            });
+        
+                
 
-            return ias;
+            //return ias;
+                return null;
         }
     }
 
     class MyAsyncResult :IAsyncResult
     {
-        public ulong statusNumber {get;}
+        public ulong statusNumber { get; set; }
         
         public MyAsyncResult(AsyncCallback asyncCallback, object state)
         {

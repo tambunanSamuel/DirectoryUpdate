@@ -24,15 +24,26 @@ namespace com.qas.sambo.directoryupdate
         private String zipFileLocation, zipFileLocationKey = "ZipFileLocation";
         private string elementListAppConfig = "ElementList";
         private string datasetFile, datasetFileKey = "JsonFileLocation";
+        private string errorLogFile, errorLogKey = "ErrorLogLocation";
 
         public static void Main()
         {
             StaticDirectoryListings.init();
-
             DirectoryUpdate du = new DirectoryUpdate();
-            du.init();
-            du.checks();
-            du.RunProgram();
+            try
+            {
+              
+                du.init();
+                du.checks();
+                du.RunProgram();
+            }catch(Exception e)
+            {
+                File.WriteAllText("testtejskl.log", e.Data.Values.ToString());
+                File.WriteAllText(du.errorLogFile, e.ToString());
+                    
+                
+            }
+            
 
 
         }
@@ -70,6 +81,7 @@ namespace com.qas.sambo.directoryupdate
                 var appSettings = ConfigurationManager.AppSettings;
                 zipFileLocation = appSettings[zipFileLocationKey] ?? @"C:\";
                 datasetFile = appSettings[datasetFileKey];
+                errorLogFile = appSettings[errorLogKey];
                 elementListFileLocation = appSettings[elementListAppConfig];
                 jsonElementListFile = new JSONUtil<JSONElementList>(elementListFileLocation);
             }
