@@ -111,11 +111,11 @@ namespace com.qas.sambo.directoryupdate.Data
         /// <param name="NewPath"></param>
         public void CopyDirectories(string SourceDir, string NewPath)
         {
-            Console.WriteLine("Moving from {0} to {1}",SourceDir,NewPath);
+            //Console.WriteLine("Moving from {0} to {1}",SourceDir,NewPath);
             // Using Visual Basic 
             try
             {
-                new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir, NewPath,true);
+                new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir, NewPath,UIOption.AllDialogs);
             }
             catch (System.InvalidOperationException e)
             {

@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>com.qas.sambo.CSharpLearning.CopyLearning</StartupObject>
+    <StartupObject>com.qas.sambo.CSharpLearning.CopyFileExTest</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -44,7 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CopyFileAPI.cs" />
+    <Compile Include="CopyFileExTest.cs" />
     <Compile Include="CopyLearning.cs" />
+    <Compile Include="DataExceptionLearning.cs" />
     <Compile Include="DelegateLearning.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

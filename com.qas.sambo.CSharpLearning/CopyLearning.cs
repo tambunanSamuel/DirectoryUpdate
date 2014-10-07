@@ -47,6 +47,7 @@ namespace com.qas.sambo.CSharpLearning
         public static void p_ProgressChanged(object sender, FileCopiedClass e)
         {
             int pos = Console.CursorTop;
+            //Console.Clear();
             //Console.WriteLine("Pos is {0}", pos);
             Console.WriteLine("Progress Copied: {0:0.00}%" , (float)e.progress/e.actualSize*100);
             //Console.WriteLine("Pos is now {0}", Console.CursorTop);
@@ -59,7 +60,9 @@ namespace com.qas.sambo.CSharpLearning
             //CopyFile()
             Progress<FileCopiedClass> p = new Progress<FileCopiedClass>();
             p.ProgressChanged += p_ProgressChanged;
-            Task ta = CreateRandomFile(@"D:\Programming\Testing\RandomFile.asd", 999999999, p);
+            string filepath = @"D:\Programming\Testing\RandomFile.asd";
+            filepath = @"C:\MyFiles\Programming\Testing\RandomFile.asd";
+            Task ta = CreateRandomFile(filepath, 999999999, p);
             ta.Wait();
         }
     }

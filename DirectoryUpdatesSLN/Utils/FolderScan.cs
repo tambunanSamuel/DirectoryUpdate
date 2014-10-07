@@ -62,6 +62,12 @@ namespace com.qas.sambo.directoryupdate.Utils
             return File.Exists(path);
         }
 
+        public bool CheckHasNZLSequenceFile(string path)
+        {
+            path = Path.Combine(path, "nzlseq.dap");
+            return File.Exists(path);
+        }
+
         /// <summary>
         /// Returns a list of string that matches the directories within 
         /// the DirectoryList. If no subdirectories match the list in DirectoryList

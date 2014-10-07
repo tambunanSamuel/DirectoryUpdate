@@ -24,7 +24,7 @@ namespace com.qas.sambo.CSharpLearning
 
         public void HelloSunshine(string s)
         {
-            Console.WriteLine("Hello Sunshine {0}", s);
+            Console.WriteLine("Hello Sunshine {0}" , s);
         }
 
         public void run()

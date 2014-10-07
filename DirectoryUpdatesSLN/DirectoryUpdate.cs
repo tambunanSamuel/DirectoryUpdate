@@ -11,6 +11,7 @@ using com.qas.sambo.directoryupdate.Utils;
 using System.Configuration;
 using System.Windows.Forms;
 using Microsoft.VisualBasic.FileIO;
+using System.Collections;
 
 
 namespace com.qas.sambo.directoryupdate
@@ -39,8 +40,25 @@ namespace com.qas.sambo.directoryupdate
             }catch(Exception e)
             {
                 File.WriteAllText("testtejskl.log", e.Data.Values.ToString());
+                File.WriteAllText("Inner.log", e.ToString());
+                File.AppendAllText("Inner.log", e.Message);
                 File.WriteAllText(du.errorLogFile, e.ToString());
+
+                File.WriteAllText("FinalLog.log", "\nMessage---\n" + e.Message);
+                File.AppendAllText("FinalLog.log", "\nSource ---\n " + e.Source);
+                File.AppendAllText("FinalLog.log", "\nStackTrace ---\n" + e.StackTrace);
+                File.AppendAllText("FinalLog.log", "\nTargetSite ---\n" + e.TargetSite);
+
+                if (e.Data.Count > 0)
+                {
+                    File.AppendAllText("FinalLog.log", "\nData Property ---\n");
+                    foreach(DictionaryEntry de in e.Data)
+                    {
+                        File.AppendAllText("FinalLog.log", "\n Key: " + de.Key.ToString() + "\n Value: " + de.Value);
+                    }
                     
+                }
+                //File.WriteAllText(du.errorLogFile,);
                 
             }
             
@@ -440,7 +458,7 @@ Q to quit");
                         var newDestPath = destPath + "\\" + Path.GetFileName(s);
                         //Console.WriteLine("NewDestPath is {0}", newDestPath);
 
-                        Console.WriteLine("Copying {0} into {1}", s, newDestPath);
+                        //Console.WriteLine("Copying {0} into {1}", s, newDestPath);
 
                         //Getting size of directory
                         Task<long> OriginalDestSize = new Task<long>(() => DirectorySize(s));
@@ -554,6 +572,12 @@ Q to quit");
                     string zipDestination = Path.Combine(zipFileLocation, dataset + " " + folderName + ".zip");
                     ZipFile(path, zipDestination);
                 }
+            }
+
+            if (fs.CheckHasNZLSequenceFile(originalPath))
+            {
+                string zipDestination = Path.Combine(zipFileLocation, dataset + " " + folderName + " SEQ"+ ".zip");
+                ZipFile(originalPath, zipDestination);
             }
 
 
