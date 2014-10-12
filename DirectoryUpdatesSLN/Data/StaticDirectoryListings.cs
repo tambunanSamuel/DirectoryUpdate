@@ -163,6 +163,11 @@ namespace com.qas.sambo.directoryupdate.data
                 Console.WriteLine("Check that {0} is in the same directory", FilePath);
                 throw;
             }
+            catch(Exception e)
+            {
+                Console.WriteLine("There is an exception. Check your JSON file. \n {0}", e);
+                throw;
+            }
             
         }
 

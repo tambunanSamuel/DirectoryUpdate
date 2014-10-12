@@ -4,10 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace com.qas.sambo.CSharpLearning
+namespace com.qas.sambo.directoryupdate
 {
     class CopyFileExTest
     {
@@ -50,14 +49,13 @@ namespace com.qas.sambo.CSharpLearning
             COPY_FILE_FAIL_IF_EXISTS = 0x00000001,
             COPY_FILE_RESTARTABLE = 0x00000002,
             COPY_FILE_OPEN_SOURCE_FOR_WRITE = 0x00000004,
-            COPY_FILE_ALLOW_DECRYPTED_DESTINATION = 0x00000008,
-            COPY_FILE_NO_BUFFERING = 0x00001000,
-            COPY_FILE_COPY_SYMLINK = 0x00000800
+            COPY_FILE_ALLOW_DECRYPTED_DESTINATION = 0x00000008
         }
 
         public void XCopy(string oldFile, string newFile)
         {
-            var ret = CopyFileEx(oldFile, newFile, new CopyProgressRoutine(this.CopyProgressHandler), IntPtr.Zero, ref pbCancel, CopyFileFlags.COPY_FILE_RESTARTABLE);
+            Console.WriteLine("\nCopying into {0}", newFile);
+            CopyFileEx(oldFile, newFile, new CopyProgressRoutine(this.CopyProgressHandler), IntPtr.Zero, ref pbCancel, CopyFileFlags.COPY_FILE_RESTARTABLE);
         }
 
         private CopyProgressResult CopyProgressHandler(long total, long transferred, long streamSize, long StreamByteTrans, uint dwStreamNumber, CopyProgressCallbackReason reason, IntPtr hSourceFile, IntPtr hDestinationFile, IntPtr lpData)
@@ -68,33 +66,35 @@ namespace com.qas.sambo.CSharpLearning
 
         public void CopyDirectory(string dirValue, string newDir)
         {
-            var dirs = Directory.EnumerateDirectories(dirValue,"*",SearchOption.AllDirectories);
+
+            Console.WriteLine("=== Copying From {0} into {1} ===", dirValue, newDir);
+            var dirs = Directory.EnumerateDirectories(dirValue, "*", SearchOption.AllDirectories);
             var fileList = Directory.EnumerateFiles(dirValue, "*", SearchOption.AllDirectories);
 
-            foreach(var d in dirs)
+            foreach (var d in dirs)
             {
-                var dirRep = d.Replace(dirValue,newDir);
+                var dirRep = d.Replace(dirValue, newDir);
                 //Console.WriteLine("Creating Directory {0}", dirRep);
                 Directory.CreateDirectory(dirRep);
             }
-
-            foreach(var f in fileList)
+            int totalFileNumber = fileList.Count();
+            int fileCopied = 0;
+            foreach (var f in fileList)
             {
+
                 var dirRep = f.Replace(dirValue, newDir);
                 //Console.WriteLine("Files {0}", dirRep);
-                Console.WriteLine("\rCopying into {0}", dirRep);
+                Console.WriteLine("[{0}/{1}]\n", ++fileCopied, totalFileNumber);
+                Console.WriteLine("Copying with progress from {0} to {1}", dirValue, newDir);
                 XCopy(f, dirRep);
-
             }
-    }
- 
+        }
 
         public static void Main()
         {
             Console.WriteLine("Testing CopyFileExTest");
             CopyFileExTest cfet = new CopyFileExTest();
-            //Console.WriteLine.cfet.XCopy(@"C:\MyFiles\Programming\Testing\RandomFile.asd", @"C:\MyFiles\Programming\Testing\RandomFile2.asd");
-            cfet.CopyDirectory(@"C:\MyFiles\Programming\Testing\DirectoryUpdateTestFolder\AUE\2014 02-February-Q", @"C:\MyFiles\Programming\Testing\CopyTesting");
+            cfet.XCopy(@"C:\MyFiles\Programming\Testing\RandomFile.asd", @"C:\MyFiles\Programming\Testing\RandomFile2.asd");
         }
 
     }

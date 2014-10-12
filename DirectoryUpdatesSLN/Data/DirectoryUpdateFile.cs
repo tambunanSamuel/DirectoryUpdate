@@ -111,8 +111,14 @@ namespace com.qas.sambo.directoryupdate.Data
         /// <param name="NewPath"></param>
         public void CopyDirectories(string SourceDir, string NewPath)
         {
-            //Console.WriteLine("Moving from {0} to {1}",SourceDir,NewPath);
+            
             // Using Visual Basic 
+            CopyFileExTest cfet = new CopyFileExTest();
+            cfet.CopyDirectory(SourceDir, NewPath);
+            
+        }
+        public void CopyDirectories_Deprecated(string SourceDir, string NewPath)
+        {
             try
             {
                 new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(SourceDir, NewPath,UIOption.AllDialogs);
