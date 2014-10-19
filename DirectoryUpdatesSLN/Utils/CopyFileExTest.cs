@@ -84,8 +84,8 @@ namespace com.qas.sambo.directoryupdate
 
                 var dirRep = f.Replace(dirValue, newDir);
                 //Console.WriteLine("Files {0}", dirRep);
-                Console.WriteLine("[{0}/{1}]\n", ++fileCopied, totalFileNumber);
-                Console.WriteLine("Copying with progress from {0} to {1}", dirValue, newDir);
+                Console.WriteLine("File: [{0}/{1}]\n", ++fileCopied, totalFileNumber);
+                
                 XCopy(f, dirRep);
             }
         }

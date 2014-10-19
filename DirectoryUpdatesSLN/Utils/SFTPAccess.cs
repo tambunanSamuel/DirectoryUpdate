@@ -7,6 +7,7 @@ using Renci.SshNet;
 using Renci.SshNet.Sftp;
 using System.IO;
 using System.Threading;
+using System.Configuration;
 
 
 namespace com.qas.sambo.directoryupdate.Utils
@@ -27,6 +28,16 @@ namespace com.qas.sambo.directoryupdate.Utils
             //host = "192.168.2.145";
             //userName = "samuel";
             //password = "sammy";
+
+            try
+            {
+                var appSettings = ConfigurationManager.AppSettings;
+                homeDirectory = appSettings["FTPLocation"];
+            }
+            catch (ConfigurationErrorsException Cee)
+            {
+                Console.WriteLine("Error reading app settings. Cannot find value: FTPLocation");
+            }
         }
 
         /// <summary>
